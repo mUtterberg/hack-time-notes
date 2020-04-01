@@ -6,3 +6,4 @@ Articles I want to make time for
 - [AWS Lambda cost optimization tools](https://www.concurrencylabs.com/blog/aws-lambda-cost-optimization-tools/)
 - [AWS Lambda best practices](https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html)
 - [Configure a Lambda to use other IAM roles](https://aws.amazon.com/premiumsupport/knowledge-center/lambda-function-assume-iam-role/)
+- [Using CPU Profiling to Optimize AWS Lambda Functions](https://read.iopipe.com/using-cpu-profiling-to-increase-the-efficiency-of-your-aws-lambda-functions-5baba7470d95)
