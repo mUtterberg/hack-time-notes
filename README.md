@@ -7,7 +7,10 @@ Notes for personal use from weekly hack time
 ### April
 
 - TBD: Begin work on [MakerPhone](https://www.circuitmess.com)
-- 3: Attempted to [configure a new Lambda](https://aws.amazon.com/blogs/infrastructure-and-automation/deploy-cloudformation-stacks-at-the-click-of-a-button/) behind my AWS IoT Button (previous Lambda was configured under old wifi). Turns out, my button is struggling with just the basic Lambda to confirm the button is functioning as expected. So...continued with Week 1 videos from AWS Fundamentals: Building Serverless Applications. Redeemed "free April" promotion on [Pluralsight](https://app.pluralsight.com/).
+- 3:
+  - Attempted to [configure a new Lambda](https://aws.amazon.com/blogs/infrastructure-and-automation/deploy-cloudformation-stacks-at-the-click-of-a-button/) behind my AWS IoT Button (previous Lambda was configured under old wifi). Turns out, my button is struggling with just the basic Lambda to confirm the button is functioning as expected. So...
+  - continued with Week 1 videos from AWS Fundamentals: Building Serverless Applications.
+  - Redeemed "free April" promotion on [Pluralsight](https://app.pluralsight.com/).
 
 ### March
 
