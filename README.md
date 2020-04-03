@@ -7,7 +7,7 @@ Notes for personal use from weekly hack time
 ### April
 
 - TBD: Begin work on [MakerPhone](https://www.circuitmess.com)
-- 3: Configure new Lambda behind my AWS IoT Button (current Lambda is outdated)
+- 3: [Configure new Lambda](https://aws.amazon.com/blogs/infrastructure-and-automation/deploy-cloudformation-stacks-at-the-click-of-a-button/) behind my AWS IoT Button (current Lambda is outdated)
 
 ### March
 
