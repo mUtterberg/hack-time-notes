@@ -4,9 +4,14 @@ Notes for personal use from weekly hack time
 
 ## 2020
 
-### April
+### May
 
 - TBD: Begin work on [MakerPhone](https://www.circuitmess.com)
+
+### April
+
+- 10:
+  - Pluralsight course from AWS Certified Developer-Associate learning path: [AWS Developer - The Big Picture]()
 - 3:
   - Attempted to [configure a new Lambda](https://aws.amazon.com/blogs/infrastructure-and-automation/deploy-cloudformation-stacks-at-the-click-of-a-button/) behind my AWS IoT Button (previous Lambda was configured under old wifi). Turns out, my button is struggling with just the basic Lambda to confirm the button is functioning as expected. So...
   - completed Week 1 videos from AWS Fundamentals: Building Serverless Applications (Lex & S3) and began Week 2's CloudFront section.
