@@ -7,7 +7,7 @@ I finally figured out a way to keep margin vs padding straight!
 - Padding, like a padded room, is inside the border.
 - Margin, like a moat, is outside the border.
 
-:raised-hands:
+:raised_hands:
 
 ## Tips for Organizing CSS
 
