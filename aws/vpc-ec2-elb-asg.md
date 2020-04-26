@@ -5,7 +5,11 @@ and implemented an Auto-Scaling Group with simple scale up and scale down rules.
 
 ## VPC
 
+### Subnets
+
 ## EC2
+
+### Elastic IP
 
 ## AMI
 
