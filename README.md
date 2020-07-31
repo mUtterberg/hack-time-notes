@@ -8,6 +8,11 @@ Notes for personal use from weekly hack time.
 
 - TODO: Make time to chip away at [project list](project-list.md) items
 - Python Morsels
+- PyLadies organizer duties
+  - [x] Create Google Meet event (utterbergdatadev organization)
+  - [x] Create meetup event
+  - [ ] Read chapters 5 & 6
+  - [ ] Prepare discussion notes for meetup
 
 ### July
 
