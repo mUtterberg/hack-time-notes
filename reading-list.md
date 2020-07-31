@@ -1,6 +1,6 @@
 # Reading List
 
-Articles I want to make time for
+Articles I want to make time for.
 
 - [AWS Python debugger](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-debugging-python.html)
 - [AWS Lambda cost optimization tools](https://www.concurrencylabs.com/blog/aws-lambda-cost-optimization-tools/)

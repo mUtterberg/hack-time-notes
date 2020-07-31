@@ -1,15 +1,29 @@
 # hack-time-notes
 
-Notes for personal use from weekly hack time
+Notes for personal use from weekly hack time.
 
 ## 2020
 
+### August
+
+- TODO: Make time to chip away at [project list](project-list.md) items
+- Python Morsels
+
+### July
+
+- Python Morsels
+
+### June
+
+- Python Morsels
+
 ### May
 
-- TBD: Begin work on [MakerPhone](https://www.circuitmess.com)
+- Python Morsels
 
 ### April
 
+- Signed back up for Python Morsels!
 - 17:
   - Pluralsight course from [AWS Certified Developer-Associate](https://app.pluralsight.com/paths/certificate/aws-certified-developer-associate) learning path: [AWS Developer - Getting Started](https://app.pluralsight.com/library/courses/aws-developer-getting-started/table-of-contents) (4h 6m)
 - 10:
