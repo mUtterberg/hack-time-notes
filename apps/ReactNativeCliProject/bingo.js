@@ -19,11 +19,9 @@ const Cell  = (props: CellProps) => {
 const Row = (props: RowProps) => {
   return (
     <View style={styles.bingo.row}>
-      <Cell contents={props.rowValues[0]}/>
-      <Cell contents={props.rowValues[1]}/>
-      <Cell contents={props.rowValues[2]}/>
-      <Cell contents={props.rowValues[3]}/>
-      <Cell contents={props.rowValues[4]}/>
+      {props.rowValues.map((value, index) => {
+        return <Cell contents={value} key={index}/>
+      })}
     </View>
   );
 };
