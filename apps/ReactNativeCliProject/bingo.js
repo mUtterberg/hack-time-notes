@@ -28,6 +28,15 @@ const Row = (props: RowProps) => {
   );
 };
 
+function selectRowValues(columnValues) {
+  let selectedRowValues = [];
+  for (const [key, value] of Object.entries(columnValues)) {
+    let randomIndex = Math.floor(Math.random() * value.length);
+    selectedRowValues.push(value[randomIndex]);
+  }
+  return selectedRowValues;
+}
+
 const GameRows = () => {
   let staticOptions = {
     b: ['b1', 'b2', 'b3', 'b4', 'b5'],
@@ -38,11 +47,11 @@ const GameRows = () => {
   };
   return (
     <> 
-      <Row rowValues={staticOptions.b}/>
-      <Row rowValues={staticOptions.i}/>
-      <Row rowValues={staticOptions.n}/>
-      <Row rowValues={staticOptions.e}/>
-      <Row rowValues={staticOptions.o}/>
+      <Row rowValues={selectRowValues(staticOptions)}/>
+      <Row rowValues={selectRowValues(staticOptions)}/>
+      <Row rowValues={selectRowValues(staticOptions)}/>
+      <Row rowValues={selectRowValues(staticOptions)}/>
+      <Row rowValues={selectRowValues(staticOptions)}/>
     </>
   );
 };
