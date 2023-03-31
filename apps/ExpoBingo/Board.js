@@ -13,9 +13,26 @@ class HeaderCell extends Component {
 };
   
 class Row extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      isBingo: false
+    };
+    this.getStyle = this.getStyle.bind(this);
+    this.checkRowBingo = this.checkRowBingo.bind(this);
+  }
+
+  checkRowBingo () {
+    let cellsSelected = [];
+  }
+
+  getStyle() {
+    return this.state.isBingo ? styles.row.bingo : styles.row.normal;
+  }
+
   render () {
     return (
-      <View style={styles.bingo.row}>
+      <View style={this.getStyle()}>
         <Cell contents={this.props.rowValues[0]}/>
         <Cell contents={this.props.rowValues[1]}/>
         <Cell contents={this.props.rowValues[2]}/>
@@ -78,18 +95,30 @@ export default Board;
 const styles = StyleSheet.create({
   bingo: {
     headerRow: {
-        flexDirection: 'row',
-        // fontWeight: 'bold',
-      },
-      row: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-        borderColor: 'black',
-        flexDirection: 'row',
-        height: 50,
-        padding: 2,
-        backgroundColor: 'pink'
-      }
+      flexDirection: 'row',
+      // fontWeight: 'bold',
+    },
+  },
+  row: {
+    normal: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: 'black',
+      flexDirection: 'row',
+      height: 50,
+      padding: 2,
+      backgroundColor: 'pink'
+    },
+    bingo: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: 'black',
+      flexDirection: 'row',
+      height: 50,
+      padding: 2,
+      backgroundColor: 'pink'
     }
-  });
+  }
+});
