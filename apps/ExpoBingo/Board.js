@@ -90,14 +90,6 @@ const styles = StyleSheet.create({
         height: 50,
         padding: 2,
         backgroundColor: 'pink'
-      },
-      cell: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 1,
-        flex: 1,
-        height: 40,
-        backgroundColor: 'yellow'
       }
     }
   });
