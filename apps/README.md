@@ -1,5 +1,23 @@
 # Mobile Application Development
 
+## ExpoBingo
+
+```shell
+% npx expo start
+```
+
+Web
+
+```shell
+% NODE_OPTIONS=--openssl-legacy-provider npx expo start --web
+```
+
+## ReactNativeCliProject
+
+```shell
+% npx react-native start
+```
+
 ## General
 
 - [12-factor app](https://12factor.net/)
