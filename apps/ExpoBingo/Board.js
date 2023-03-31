@@ -1,16 +1,6 @@
 import { Component } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-
-  
-class Cell extends Component {
-  render () {
-    return (
-      <View style={styles.bingo.cell}>
-        <Button title={this.props.contents} onPress={() => alert("You tapped " + this.props.contents + "!")}/>
-      </View>
-    );
-  }
-}
+import Cell from './Cell';
 
 class HeaderCell extends Component {
   render () {

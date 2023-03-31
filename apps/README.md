@@ -25,3 +25,8 @@ Web
 - [React Native](https://reactnative.dev/)
 - [Expo Go](https://expo.dev/client)
 - [Snack](https://snack.expo.dev/)
+
+### State vs props
+
+> As a general rule, use props to configure a component when it renders. Use state to keep track of any component data that you expect to change over time.
+> ([source](https://reactnative.dev/docs/intro-react?language=javascript#state))
