@@ -1,15 +1,16 @@
-import { Component } from 'react';
+import { Component, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Cell from './Cell';
+import Banner from './Banner';
 
-class HeaderCell extends Component {
-  render () {
-    return (
-      <View style={styles.bingo.headerCell}>
-        <Button title={this.props.contents} />
-      </View>
-    )
-  }
+function HeaderCell ({ contents }) {
+  return (
+    <>
+    <View style={styles.bingo.headerCell}>
+      <Button title={contents} />
+    </View>
+    </>
+  )
 };
   
 class Row extends Component {
@@ -43,56 +44,65 @@ class Row extends Component {
   }
 };
   
-class GameRows extends Component {
-  render () {
-    let staticOptions = {
-      b: ['b1', 'b2', 'b3', 'b4', 'b5'],
-      i: ['i6', 'i7', 'i8', 'i9', 'i10'],
-      n: ['n11', 'n12', 'n13', 'n14', 'n15'],
-      e: ['e16', 'e17', 'e18', 'e19', 'e20'],
-      o: ['o21', 'o22', 'o23', 'o24', 'o25'],
-    };
-      
-    return (
-      <> 
-        <Row rowValues={staticOptions.b}/>
-        <Row rowValues={staticOptions.i}/>
-        <Row rowValues={staticOptions.n}/>
-        <Row rowValues={staticOptions.e}/>
-        <Row rowValues={staticOptions.o}/>
-      </>
-    );
-  }
+function GameRows(props) {
+  const rows = [0, 1, 2, 3, 4].map(row_ix => {
+    <Row rowValues={props.rowValues[row_ix]}/>  
+  });
+
+  return (
+    <> 
+      <Row rowValues={props.rowValues[0]} newGame={props.newGame}/>
+      <Row rowValues={props.rowValues[1]}/>
+      <Row rowValues={props.rowValues[2]}/>
+      <Row rowValues={props.rowValues[3]}/>
+      <Row rowValues={props.rowValues[4]}/>
+      {/* {rows} */}
+    </>
+  );
 };
   
-class HeaderRow extends Component {
-  render () {
-    return (
-      <View style={styles.bingo.headerRow}>
-        <HeaderCell contents='B'/>
-        <HeaderCell contents='I'/>
-        <HeaderCell contents='N'/>
-        <HeaderCell contents='E'/>
-        <HeaderCell contents='O'/>
-      </View>
-    )
-  }
+function HeaderRow() {
+  const bineo = ['B', 'I', 'N', 'E', 'O'];
+  const headers = bineo.map(letter => 
+    <HeaderCell contents={letter} key={letter}/>
+  );
+  return (
+    <>
+    <View style={styles.bingo.headerRow}>
+      {headers}
+    </View>
+    </>
+  )
 };
 
-class Board extends Component {
-  render () {
-    return (
-      <>
-      <HeaderRow />
-      <GameRows />
-      </>
-    )
+function Board({}) {
+  const [newGame, setNewGame] = useState(true);
+
+  function handleNewGame() {
+    alert("Resetting the game board...");
   }
-};
+
+  let staticOptions = [
+    ['b1', 'b2', 'b3', 'b4', 'b5'],
+    ['i6', 'i7', 'i8', 'i9', 'i10'],
+    ['n11', 'n12', 'n13', 'n14', 'n15'],
+    ['e16', 'e17', 'e18', 'e19', 'e20'],
+    ['o21', 'o22', 'o23', 'o24', 'o25'],
+  ]
+
+  return (
+    <>
+    <Banner newGame={newGame} />
+    <HeaderRow />
+    <GameRows rowValues={staticOptions} newGame={newGame} />
+    </>
+  )
+}
 
 export default Board;
 
 const styles = StyleSheet.create({
+  board: {},
   bingo: {
     headerRow: {
       flexDirection: 'row',

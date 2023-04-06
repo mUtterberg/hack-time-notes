@@ -1,45 +1,34 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
   
-class Cell extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isSelected: false
-    };
-    this.getStyle = this.getStyle.bind(this);
-    this.handlePress = this.handlePress.bind(this);
-    this.handleLongPress = this.handleLongPress.bind(this);
+export default function Cell({ contents }) {
+  
+  const [isSelected, setSelected] = useState(false);
+
+  function getStyle() {
+    return isSelected ? styles.cell.selected : styles.cell.available;
   }
 
-  getStyle() {
-    return this.state.isSelected ? styles.cell.selected : styles.cell.available;
+  function handlePress() {
+    setSelected(!isSelected);
+    alert("You selected " + contents + "!");
   }
 
-  handlePress() {
-    this.setState({isSelected: !this.state.isSelected});
-    alert("You selected " + this.props.contents + "!");
+  function handleLongPress() {
+    alert("You long-pressed " + contents + "!");
   }
 
-  handleLongPress() {
-    alert("You long-pressed " + this.props.contents + "!");
-  }
-
-  render () {
-    return (
-      <TouchableHighlight style={this.getStyle()} onPress={this.handlePress} onLongPress={this.handleLongPress}>
-      <View style={this.getStyle()}>
-        <Pressable title={this.props.contents} onPress={this.handlePress} onLongPress={this.handleLongPress}>
-          <Text>{this.props.contents}</Text>
-        </Pressable>
-      </View>
-      </TouchableHighlight>
-    );
-  }
+  return (
+    <TouchableHighlight style={getStyle()} onPress={handlePress} onLongPress={handleLongPress}>
+    <View style={getStyle()}>
+      <Pressable title={contents} onPress={handlePress} onLongPress={handleLongPress}>
+        <Text>{contents}</Text>
+      </Pressable>
+    </View>
+    </TouchableHighlight>
+  );
 }
-
-export default Cell;
 
 const styles = StyleSheet.create({
   cell: {

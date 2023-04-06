@@ -1,18 +1,21 @@
-import { Component } from 'react';
+import { Component, useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-class Banner extends Component {
-  render () {
-    return (
-      <View style={styles.banner}>
-        <Text>Expo Bingo</Text>
-        <Button title="New Game" onPress={() => alert("You tapped New Game!")}/>
-      </View>
-    )
-  }
-};
+export default function Banner() {
+  const [newGame, setNewGame] = useState(false);
 
-export default Banner;
+  function handleNewGame() {
+    setNewGame(true);
+    alert("You tapped New Game!");
+  }
+
+  return (
+    <View style={styles.banner}>
+      <Text>Expo Bingo</Text>
+      <Button title="New Game" onPress={handleNewGame}/>
+    </View>
+  )
+};
 
 const styles = StyleSheet.create({
   banner: {
@@ -20,6 +23,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightpink',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10
+    padding: 10,
+    margin: 10,
   }
 });
