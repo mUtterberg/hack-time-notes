@@ -4,12 +4,11 @@ import { Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-nat
 export default function Cell({ contents, selectedIds, addSelectedId }) {
 
   function getStyle() {
-    return selectedIds.includes(contents) ? styles.cell.selected : styles.cell.available;
+    return selectedIds.has(contents) ? styles.cell.selected : styles.cell.available;
   }
 
   function handlePress() {
     addSelectedId(contents);
-    alert("You selected " + contents + "!");
   }
 
   function handleLongPress() {

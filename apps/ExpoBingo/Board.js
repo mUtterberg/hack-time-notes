@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Cell from './Cell';
 import Banner from './Banner';
@@ -29,27 +29,49 @@ function HeaderRow() {
 
 function Board({}) {
   const [newGame, setNewGame] = useState(true);
-  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectedIds, setSelectedIds] = useState(new Set());
+
+  useEffect(() => {
+    bingoValues.map(row => {
+      if (isRowBingo(row)) {
+        alert("Bingo!");
+        setNewGame(false);
+        setSelectedIds(new Set());
+      }
+    })
+  });
 
   function handleNewGame() {
-    alert("You tapped New Game!");
     setNewGame(true);
-    setSelectedIds([]);
+    setSelectedIds(new Set());
   }
 
   function addSelectedId(id) {
-    setSelectedIds([...selectedIds, id]);
+    setSelectedIds(new Set(selectedIds).add(id));
   }
 
-  const staticOptions = [
-    ['b1', 'i6', 'n11', 'e16', 'o21'],
-    ['b2', 'i7', 'n12', 'e17', 'o22'],
-    ['b3', 'i8', 'n13', 'e18', 'o23'],
-    ['b4', 'i9', 'n14', 'e19', 'o24'],
-    ['b5', 'i10', 'n15', 'e20', 'o25'],
-  ]
+  const staticCellKeys = {
+    b: ['B1', 'B2', 'B3', 'B4', 'B5'],
+    i: ['I6', 'I7', 'I8', 'I9', 'I10'],
+    n: ['N11', 'N12', 'N13', 'N14', 'N15'],
+    e: ['E16', 'E17', 'E18', 'E19', 'E20'],
+    o: ['O21', 'O22', 'O23', 'O24', 'O25'],
+  };
 
-  const board = staticOptions.map(row =>
+  function isRowBingo(row) {
+    // console.log("Checking row: " + row + "; selected ids: " + Array.from(selectedIds))
+    return row.every(cell => selectedIds.has(cell));
+  };
+
+  const orderedCellKeys = Object.values(staticCellKeys)
+
+    
+  function transposeSelectedValues(matrix) {
+    return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
+  }
+  
+  const bingoValues = transposeSelectedValues(orderedCellKeys)
+  const board = bingoValues.map(row =>
     (
       <View style={styles.row.normal} key={row[0]}>
       {row.map(cell =>
