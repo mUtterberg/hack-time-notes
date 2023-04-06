@@ -1,17 +1,14 @@
-import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
   
-export default function Cell({ contents }) {
-  
-  const [isSelected, setSelected] = useState(false);
+export default function Cell({ contents, selectedIds, addSelectedId }) {
 
   function getStyle() {
-    return isSelected ? styles.cell.selected : styles.cell.available;
+    return selectedIds.includes(contents) ? styles.cell.selected : styles.cell.available;
   }
 
   function handlePress() {
-    setSelected(!isSelected);
+    addSelectedId(contents);
     alert("You selected " + contents + "!");
   }
 

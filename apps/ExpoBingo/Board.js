@@ -1,4 +1,4 @@
-import { Component, useState } from 'react';
+import { useState } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Cell from './Cell';
 import Banner from './Banner';
@@ -11,54 +11,6 @@ function HeaderCell ({ contents }) {
     </View>
     </>
   )
-};
-  
-class Row extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      isBingo: false
-    };
-    this.getStyle = this.getStyle.bind(this);
-    this.checkRowBingo = this.checkRowBingo.bind(this);
-  }
-
-  checkRowBingo () {
-    let cellsSelected = [];
-  }
-
-  getStyle() {
-    return this.state.isBingo ? styles.row.bingo : styles.row.normal;
-  }
-
-  render () {
-    return (
-      <View style={this.getStyle()}>
-        <Cell contents={this.props.rowValues[0]}/>
-        <Cell contents={this.props.rowValues[1]}/>
-        <Cell contents={this.props.rowValues[2]}/>
-        <Cell contents={this.props.rowValues[3]}/>
-        <Cell contents={this.props.rowValues[4]}/>
-      </View>
-    );
-  }
-};
-  
-function GameRows(props) {
-  const rows = [0, 1, 2, 3, 4].map(row_ix => {
-    <Row rowValues={props.rowValues[row_ix]}/>  
-  });
-
-  return (
-    <> 
-      <Row rowValues={props.rowValues[0]} newGame={props.newGame}/>
-      <Row rowValues={props.rowValues[1]}/>
-      <Row rowValues={props.rowValues[2]}/>
-      <Row rowValues={props.rowValues[3]}/>
-      <Row rowValues={props.rowValues[4]}/>
-      {/* {rows} */}
-    </>
-  );
 };
   
 function HeaderRow() {
@@ -77,24 +29,46 @@ function HeaderRow() {
 
 function Board({}) {
   const [newGame, setNewGame] = useState(true);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   function handleNewGame() {
-    alert("Resetting the game board...");
+    alert("You tapped New Game!");
+    setNewGame(true);
+    setSelectedIds([]);
   }
 
-  let staticOptions = [
-    ['b1', 'b2', 'b3', 'b4', 'b5'],
-    ['i6', 'i7', 'i8', 'i9', 'i10'],
-    ['n11', 'n12', 'n13', 'n14', 'n15'],
-    ['e16', 'e17', 'e18', 'e19', 'e20'],
-    ['o21', 'o22', 'o23', 'o24', 'o25'],
+  function addSelectedId(id) {
+    setSelectedIds([...selectedIds, id]);
+  }
+
+  const staticOptions = [
+    ['b1', 'i6', 'n11', 'e16', 'o21'],
+    ['b2', 'i7', 'n12', 'e17', 'o22'],
+    ['b3', 'i8', 'n13', 'e18', 'o23'],
+    ['b4', 'i9', 'n14', 'e19', 'o24'],
+    ['b5', 'i10', 'n15', 'e20', 'o25'],
   ]
+
+  const board = staticOptions.map(row =>
+    (
+      <View style={styles.row.normal} key={row[0]}>
+      {row.map(cell =>
+        <Cell
+          contents={cell}
+          selectedIds={selectedIds}
+          addSelectedId={addSelectedId}
+          key={cell}
+        />
+        )}
+      </View>
+    )
+  );
 
   return (
     <>
-    <Banner newGame={newGame} />
+    <Banner newGame={newGame} handleNewGame={handleNewGame} />
     <HeaderRow />
-    <GameRows rowValues={staticOptions} newGame={newGame} />
+    {board}
     </>
   )
 }

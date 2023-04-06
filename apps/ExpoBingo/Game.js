@@ -1,13 +1,9 @@
-import { Component } from "react";
+import { useState } from "react";
 
-class Game extends Component {
-  render () {
-    return (
-      <div>
-        <h1>Game</h1>
-      </div>
-    );
-  }
+export default function Game() {
+  return (
+    <div>
+      <h1>Game</h1>
+    </div>
+  );
 };
-
-export default Game;

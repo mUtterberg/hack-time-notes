@@ -1,13 +1,7 @@
-import { Component, useState } from 'react';
+import { useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-export default function Banner() {
-  const [newGame, setNewGame] = useState(false);
-
-  function handleNewGame() {
-    setNewGame(true);
-    alert("You tapped New Game!");
-  }
+export default function Banner({ newGame, handleNewGame }) {
 
   return (
     <View style={styles.banner}>
