@@ -34,11 +34,23 @@ function Board({}) {
   useEffect(() => {
     bingoValues.map(row => {
       if (isRowBingo(row)) {
-        alert("Bingo!");
+        alert("Bingo! (Row)");
         setNewGame(false);
         setSelectedIds(new Set());
       }
     })
+    Object.values(staticCellKeys).map(column => {
+      if (isColumnBingo(column)) {
+        alert("Bingo! (Column)");
+        setNewGame(false);
+        setSelectedIds(new Set());
+      }
+    })
+    if (isCrossBingo()) {
+      alert("Bingo! (Cross)");
+      setNewGame(false);
+      setSelectedIds(new Set());
+    }
   });
 
   function handleNewGame() {
@@ -62,6 +74,17 @@ function Board({}) {
     // console.log("Checking row: " + row + "; selected ids: " + Array.from(selectedIds))
     return row.every(cell => selectedIds.has(cell));
   };
+
+  function isColumnBingo(column) {
+    // console.log("Checking column: " + column + "; selected ids: " + Array.from(selectedIds))
+    return column.every(cell => selectedIds.has(cell));
+  }
+
+  function isCrossBingo() {
+    const cross1 = ['B1', 'I7', 'N13', 'E19', 'O25'];
+    const cross2 = ['B5', 'I9', 'N13', 'E17', 'O21'];
+    return cross1.every(cell => selectedIds.has(cell)) || cross2.every(cell => selectedIds.has(cell));
+  }
 
   const orderedCellKeys = Object.values(staticCellKeys)
 
