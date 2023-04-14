@@ -8,6 +8,7 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  ImageBackground,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -22,7 +23,7 @@ import {
   Header,
 } from 'react-native/Libraries/NewAppScreen';
 
-import BingoApp from './bingo';
+import Board from './bingo';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -70,12 +71,20 @@ function App(): JSX.Element {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        <Header />
+        <View style={styles.sectionContainer}>
+        <ImageBackground
+          style={styles.banner}
+          source={{
+            uri: 'https://www.onlyinyourstate.com/wp-content/uploads/2019/10/29015623688_1fc59b7c8b_k.jpg',
+          }}
+        />
+        </View>
+
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <BingoApp />
+          <Board />
           
         </View>
       </ScrollView>
@@ -99,6 +108,12 @@ const styles = StyleSheet.create({
   },
   highlight: {
     fontWeight: '700',
+  },
+  banner: {
+    height: 200,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    flex: 1,
   },
 });
 

@@ -40,8 +40,8 @@ function Board({}) {
       "Bingo! (" + mode + ")",
       "You won! New game?",
       [
-        {text: 'No', onPress: () => setGamePlay(false), style: 'cancel'},
-        {text: 'Yes!', onPress: () => handleNewGame()}
+        {text: 'Yes!', onPress: () => handleNewGame()},
+        {text: 'No', onPress: () => setGamePlay(false), style: 'cancel'}
       ]
       );
   }

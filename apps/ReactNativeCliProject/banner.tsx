@@ -4,7 +4,7 @@ export default function Banner({ handleNewGame }: { handleNewGame: () => void })
 
   return (
     <View style={styles.banner}>
-      <Text>Expo Bingo</Text>
+      <Text>Northeast Ohio Bingo</Text>
       <Button title="New Game" onPress={handleNewGame}/>
     </View>
   )
