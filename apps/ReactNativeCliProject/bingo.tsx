@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import Banner from './banner';
 import Cell from './cell';
+import { staticCellKeys } from './content';
 
 type HeaderCellProps = {
   contents: string
@@ -71,14 +72,6 @@ function Board({}) {
   function addSelectedId(id: string) {
     setSelectedIds(new Set(selectedIds).add(id));
   }
-
-  const staticCellKeys = {
-    b: ['B1', 'B2', 'B3', 'B4', 'B5'],
-    i: ['I6', 'I7', 'I8', 'I9', 'I10'],
-    n: ['N11', 'N12', 'N13', 'N14', 'N15'],
-    e: ['E16', 'E17', 'E18', 'E19', 'E20'],
-    o: ['O21', 'O22', 'O23', 'O24', 'O25'],
-  };
 
   function isRowBingo(row: Array<string>) {
     return row.every(cell => selectedIds.has(cell));
