@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import Banner from './banner';
 import Cell from './cell';
-import { staticCellKeys } from './content';
+import { BingoMaker } from './content';
 
 type HeaderCellProps = {
   contents: string
@@ -35,6 +35,11 @@ function HeaderRow() {
 function Board({}) {
   const [gamePlay, setGamePlay] = useState(true);
   const [selectedIds, setSelectedIds] = useState(new Set<string>());
+  const [bingoOptions, setBingoOptions] = useState(BingoMaker.create());
+  // const [bingoOptions, setBingoOptions] = useState(bingoShuffle());
+
+  const orderedCellKeys = Object.values(bingoOptions.boardMap)
+  const bingoValues = transposeSelectedValues(orderedCellKeys)
 
   function handleBingo(mode: string) {
     Alert.alert(
@@ -49,12 +54,12 @@ function Board({}) {
 
   useEffect(() => {
     if (!gamePlay) {return;}
-    bingoValues.map(row => {
+    bingoOptions.boardValues.map(row => {
       if (isRowBingo(row)) {
         handleBingo("Row");
       }
     })
-    Object.values(staticCellKeys).map(column => {
+    Object.values(bingoOptions.boardMap).map(column => {
       if (isColumnBingo(column)) {
         handleBingo("Column");
       }
@@ -64,9 +69,14 @@ function Board({}) {
     }
   });
 
+  function selectNewCards() {
+    setBingoOptions(BingoMaker.create());
+  }
+
   function handleNewGame() {
-    setGamePlay(true);
     setSelectedIds(new Set<string>());
+    selectNewCards();
+    setGamePlay(true);
   }
 
   function addSelectedId(id: string) {
@@ -82,20 +92,20 @@ function Board({}) {
   }
 
   function isCrossBingo() {
-    const cross1 = ['B1', 'I7', 'N13', 'E19', 'O25'];
-    const cross2 = ['B5', 'I9', 'N13', 'E17', 'O21'];
+    const cross1 = [
+      bingoOptions.boardMap.b[0], bingoOptions.boardMap.i[1], bingoOptions.boardMap.n[2], bingoOptions.boardMap.e[3], bingoOptions.boardMap.o[4]
+    ];
+    const cross2 = [
+      bingoOptions.boardMap.b[4], bingoOptions.boardMap.i[3], bingoOptions.boardMap.n[2], bingoOptions.boardMap.e[1], bingoOptions.boardMap.o[0]
+    ];
     return cross1.every(cell => selectedIds.has(cell)) || cross2.every(cell => selectedIds.has(cell));
   }
 
-  const orderedCellKeys = Object.values(staticCellKeys)
-
-    
   function transposeSelectedValues(matrix: string[][]) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
   }
-  
-  const bingoValues = transposeSelectedValues(orderedCellKeys)
-  const board = bingoValues.map(row =>
+
+  const board = bingoOptions.boardValues.map(row =>
     (
       <View style={styles.row} key={row[0]}>
       {row.map(cell =>
