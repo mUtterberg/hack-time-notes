@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import Banner from './banner';
 import Cell from './cell';
 
-type CellProps = {
+type HeaderCellProps = {
   contents: string
 };
 
-type RowProps = {
-  rowValues: Array<string>
-};
-
-function HeaderCell ({ contents }) {
+function HeaderCell ({ contents }: HeaderCellProps) {
   return (
     <>
-    <View style={styles.bingo.headerCell}>
+    <View style={styles.headerCell}>
       <Text>{contents}</Text>
     </View>
     </>
@@ -28,7 +24,7 @@ function HeaderRow() {
   );
   return (
     <>
-    <View style={styles.bingo.headerRow}>
+    <View style={styles.headerRow}>
       {headers}
     </View>
     </>
@@ -36,37 +32,43 @@ function HeaderRow() {
 };
 
 function Board({}) {
-  const [newGame, setNewGame] = useState(true);
-  const [selectedIds, setSelectedIds] = useState(new Set());
+  const [gamePlay, setGamePlay] = useState(true);
+  const [selectedIds, setSelectedIds] = useState(new Set<string>());
+
+  function handleBingo(mode: string) {
+    Alert.alert(
+      "Bingo! (" + mode + ")",
+      "You won! New game?",
+      [
+        {text: 'No', onPress: () => setGamePlay(false), style: 'cancel'},
+        {text: 'Yes!', onPress: () => handleNewGame()}
+      ]
+      );
+  }
 
   useEffect(() => {
+    if (!gamePlay) {return;}
     bingoValues.map(row => {
       if (isRowBingo(row)) {
-        alert("Bingo! (Row)");
-        setNewGame(false);
-        setSelectedIds(new Set());
+        handleBingo("Row");
       }
     })
     Object.values(staticCellKeys).map(column => {
       if (isColumnBingo(column)) {
-        alert("Bingo! (Column)");
-        setNewGame(false);
-        setSelectedIds(new Set());
+        handleBingo("Column");
       }
     })
     if (isCrossBingo()) {
-      alert("Bingo! (Cross)");
-      setNewGame(false);
-      setSelectedIds(new Set());
+      handleBingo("Cross");
     }
   });
 
   function handleNewGame() {
-    setNewGame(true);
-    setSelectedIds(new Set());
+    setGamePlay(true);
+    setSelectedIds(new Set<string>());
   }
 
-  function addSelectedId(id) {
+  function addSelectedId(id: string) {
     setSelectedIds(new Set(selectedIds).add(id));
   }
 
@@ -78,13 +80,11 @@ function Board({}) {
     o: ['O21', 'O22', 'O23', 'O24', 'O25'],
   };
 
-  function isRowBingo(row) {
-    // console.log("Checking row: " + row + "; selected ids: " + Array.from(selectedIds))
+  function isRowBingo(row: Array<string>) {
     return row.every(cell => selectedIds.has(cell));
   };
 
-  function isColumnBingo(column) {
-    // console.log("Checking column: " + column + "; selected ids: " + Array.from(selectedIds))
+  function isColumnBingo(column: Array<string>) {
     return column.every(cell => selectedIds.has(cell));
   }
 
@@ -97,19 +97,20 @@ function Board({}) {
   const orderedCellKeys = Object.values(staticCellKeys)
 
     
-  function transposeSelectedValues(matrix) {
+  function transposeSelectedValues(matrix: string[][]) {
     return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
   }
   
   const bingoValues = transposeSelectedValues(orderedCellKeys)
   const board = bingoValues.map(row =>
     (
-      <View style={styles.row.normal} key={row[0]}>
+      <View style={styles.row} key={row[0]}>
       {row.map(cell =>
         <Cell
           contents={cell}
           selectedIds={selectedIds}
           addSelectedId={addSelectedId}
+          gamePlay={gamePlay}
           key={cell}
         />
         )}
@@ -119,7 +120,7 @@ function Board({}) {
 
   return (
     <>
-    <Banner newGame={newGame} handleNewGame={handleNewGame} />
+    <Banner handleNewGame={handleNewGame} />
     <HeaderRow />
     {board}
     </>
@@ -129,41 +130,26 @@ function Board({}) {
 export default Board;
 
 const styles = StyleSheet.create({
-  board: {},
-  bingo: {
-    headerRow: {
-      flexDirection: 'row',
-      // fontWeight: 'bold',
-    },
-    headerCell: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      flex: 1,
-      height: 40,
-      backgroundColor: 'yellow'
-    },
+  headerRow: {
+    flexDirection: 'row',
+  },
+  headerCell: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    flex: 1,
+    height: 40,
+    fontWeight: 'bold',
+    backgroundColor: 'yellow'
   },
   row: {
-    normal: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: 'black',
-      flexDirection: 'row',
-      height: 50,
-      padding: 2,
-      backgroundColor: 'pink'
-    },
-    bingo: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      borderColor: 'black',
-      flexDirection: 'row',
-      height: 50,
-      padding: 2,
-      backgroundColor: 'pink'
-    }
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'black',
+    flexDirection: 'row',
+    height: 50,
+    padding: 2,
+    backgroundColor: 'pink'
   }
 });

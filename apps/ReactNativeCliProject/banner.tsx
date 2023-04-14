@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-export default function Banner({ newGame, handleNewGame }) {
+export default function Banner({ handleNewGame }: { handleNewGame: () => void }) {
 
   return (
     <View style={styles.banner}>

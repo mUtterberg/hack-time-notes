@@ -1,29 +1,35 @@
-import { Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 
-type CellProps = {
+type TrackingFunction = (id: string) => void;
+
+export type CellProps = {
   contents: string,
-  selectedIds: Array<string>,
-  // addSelectedId: function
+  selectedIds: Set<string>,
+  addSelectedId: TrackingFunction,
+  gamePlay: boolean
 };
 
-export default function Cell ({ contents, selectedIds, addSelectedId }) {
+export default function Cell ({contents, selectedIds, addSelectedId, gamePlay}: CellProps) {
 
   function getStyle() {
-    return selectedIds.has(contents) ? styles.cell.selected : styles.cell.available;
+    return selectedIds.has(contents) ? styles.selected : styles.available;
   }
 
   function handlePress() {
+    if (!gamePlay) {
+      return;
+    }
     addSelectedId(contents);
   }
 
   function handleLongPress() {
-    alert("You long-pressed " + contents + "!");
+    Alert.alert("You long-pressed " + contents + "!");
   }
 
   return (
     <TouchableHighlight style={getStyle()} onPress={handlePress} onLongPress={handleLongPress}>
     <View style={getStyle()}>
-      <Pressable title={contents} onPress={handlePress} onLongPress={handleLongPress}>
+      <Pressable onPress={handlePress} onLongPress={handleLongPress}>
         <Text>{contents}</Text>
       </Pressable>
     </View>
@@ -32,23 +38,20 @@ export default function Cell ({ contents, selectedIds, addSelectedId }) {
 };
 
 const styles = StyleSheet.create({
-  cell: {
-    available: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      flex: 1,
-      height: 40,
-      backgroundColor: 'yellow'
-    },
-    selected: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderWidth: 1,
-      flex: 1,
-      height: 40,
-      backgroundColor: 'green'
-    }
+  available: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    flex: 1,
+    height: 40,
+    backgroundColor: 'yellow'
+  },
+  selected: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    flex: 1,
+    height: 40,
+    backgroundColor: 'green'
   }
-
 });
