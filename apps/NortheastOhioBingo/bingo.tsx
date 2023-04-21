@@ -35,6 +35,7 @@ function HeaderRow() {
 
 function Board({}) {
   const [gamePlay, setGamePlay] = useState(true);
+  const [gameMode, setGameMode] = useState("simple");
   const [selectedIds, setSelectedIds] = useState(new Set(["n2"]));
   const [bingoOptions, setBingoOptions] = useState(BingoMaker.create());
 
@@ -51,6 +52,7 @@ function Board({}) {
 
   useEffect(() => {
     if (!gamePlay) {return;}
+    if (gameMode === "simple") {
     bingoOptions.boardValues.map(row => {
       if (isRowBingo(row, bingoOptions.boardValues.indexOf(row))) {
         handleBingo("Row");
@@ -66,6 +68,11 @@ function Board({}) {
     if (isCrossBingo()) {
       handleBingo("Cross");
     }
+  } else if (gameMode === "blackout") {
+    if (isBlackout()) {
+      handleBingo("Blackout");
+    }
+  }
   });
 
   function selectNewCards() {
@@ -80,6 +87,10 @@ function Board({}) {
 
   function addSelectedId(id: string) {
     setSelectedIds(new Set(selectedIds).add(id));
+  }
+
+  function isBlackout() {
+    return bingoOptions.boardValues.every(row => row.every(cell => selectedIds.has(getCellId(cell, bingoOptions.boardValues.indexOf(row)))));
   }
 
   function isRowBingo(row: Array<ClevelandData>, rowNum: number) {
@@ -137,7 +148,7 @@ function Board({}) {
 
   return (
     <>
-    <Banner handleNewGame={handleNewGame} />
+    <Banner handleNewGame={handleNewGame} gameMode={gameMode} setGameMode={setGameMode} />
     <HeaderRow />
     {board}
     </>
