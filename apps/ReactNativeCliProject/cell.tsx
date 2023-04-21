@@ -1,36 +1,70 @@
-import { Alert, Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Alert, Linking, Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { ClevelandData } from './contentTypes';
 
 type TrackingFunction = (id: string) => void;
 
 export type CellProps = {
-  contents: string,
+  contents: ClevelandData,
+  id: string,
   selectedIds: Set<string>,
   addSelectedId: TrackingFunction,
   gamePlay: boolean
 };
 
-export default function Cell ({contents, selectedIds, addSelectedId, gamePlay}: CellProps) {
+export default function Cell ({contents, id, selectedIds, addSelectedId, gamePlay}: CellProps) {
 
-  function getStyle() {
-    return selectedIds.has(contents) ? styles.selected : styles.available;
+  function getHighlightStyle() {
+    return selectedIds.has(id) ? styles.selectedTouchable : styles.availableTouchable;
+  }
+
+  function getPressableStyle() {
+    return selectedIds.has(id) ? styles.selectedCell : styles.availableCell;
   }
 
   function handlePress() {
     if (!gamePlay) {
       return;
     }
-    addSelectedId(contents);
+    addSelectedId(id);
+  }
+
+  function handleMoreInfo() {
+    if (contents.url !== undefined) {
+      Alert.alert(
+        contents.name,
+        contents.notes,
+        [{text: "Go to " + contents.url, onPress: () => Linking.openURL(contents.url)}]
+        );
+    } else if (contents.notes !== undefined) {
+    Alert.alert(
+      contents.name,
+      contents.notes
+      );
+    } else {
+      Alert.alert(
+        contents.name,
+        "No additional information (yet)"
+        );
+    }
   }
 
   function handleLongPress() {
-    Alert.alert("You long-pressed " + contents + "!");
+    Alert.alert(
+      contents.name + "!",
+      "Did you go?",
+      [
+        {text: 'Yes!', onPress: () => handlePress()},
+        {text: 'No', onPress: () => {}, style: 'cancel'},
+        {text: "Tell me more", onPress: () => handleMoreInfo()}
+      ]
+      );
   }
 
   return (
-    <TouchableHighlight style={getStyle()} onPress={handlePress} onLongPress={handleLongPress}>
-    <View style={getStyle()}>
+    <TouchableHighlight style={getHighlightStyle()} onPress={handlePress} onLongPress={handleLongPress}>
+    <View style={getPressableStyle()}>
       <Pressable onPress={handlePress} onLongPress={handleLongPress}>
-        <Text>{contents}</Text>
+        <Text>{contents.displayName}</Text>
       </Pressable>
     </View>
     </TouchableHighlight>
@@ -38,7 +72,23 @@ export default function Cell ({contents, selectedIds, addSelectedId, gamePlay}: 
 };
 
 const styles = StyleSheet.create({
-  available: {
+  availableCell: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderWidth: 1,
+    flex: 1,
+    height: 40,
+    backgroundColor: 'yellow'
+  },
+  selectedCell: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderWidth: 1,
+    flex: 1,
+    height: 40,
+    backgroundColor: 'green'
+  },
+  availableTouchable: {
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
@@ -46,12 +96,12 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: 'yellow'
   },
-  selected: {
+  selectedTouchable: {
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     flex: 1,
     height: 40,
     backgroundColor: 'green'
-  }
+  },
 });

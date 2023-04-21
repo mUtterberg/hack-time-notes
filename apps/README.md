@@ -1,18 +1,6 @@
 # Mobile Application Development
 
-## ExpoBingo
-
-```shell
-% npx expo start
-```
-
-Web
-
-```shell
-% NODE_OPTIONS=--openssl-legacy-provider npx expo start --web
-```
-
-## ReactNativeCliProject
+## NortheastOhioBingo
 
 ```shell
 % npx react-native start
@@ -30,3 +18,17 @@ Web
 
 > As a general rule, use props to configure a component when it renders. Use state to keep track of any component data that you expect to change over time.
 > ([source](https://reactnative.dev/docs/intro-react?language=javascript#state))
+
+## ExpoBingo
+
+No longer maintaining, as of App 0.3
+
+```shell
+% npx expo start
+```
+
+Web
+
+```shell
+% NODE_OPTIONS=--openssl-legacy-provider npx expo start --web
+```

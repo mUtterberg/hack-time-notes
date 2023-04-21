@@ -1,0 +1,52 @@
+{
+  "b": [
+    {"name": "Brewery District"},
+    {"name": "Great Lakes Brewing"},
+    {"name": "Market Garden Brewery"},
+    {"name": "Fat Head's Brewery"},
+    {"name": "Great Lakes Distillery"},
+    {"name": "Bier Markt"},
+    {"name": "Li Wah"},
+    {"name": "Asian Fest"},
+    {"name": "Superior Pho"},
+    {"name": "Tommy's"},
+    {"name": "Lucky's"},
+    {"name": "Inn on Coventry"},
+    {"name": "Lakeview Cemetery"},
+    {"name": "Chagrin Falls"}
+  ],
+  "i": [
+    {"name": "Harp"},
+    {"name": "Pier W"},
+    {"name": "Lakewood Truck Park"},
+    {"name": "Solstice Steps"},
+    {"name":"European Imports"},
+    {"name": "Red Line Greenway"}
+  ],
+  "n": [
+    {"name": "Rood"},
+    {"name": "41 North"},
+    {"name": "RTA to Downtown"},
+    {"name": "Soldiers & Sailors"},
+    {"name": "Cleveland Monsters Hockey"},
+    {"name": "Cleveland Guardians Baseball"},
+    {"name": "Cleveland Cavaliers Basketball"},
+    {"name": "Cleveland Browns Football"}
+  ],
+  "e": [
+    {"name": "Cleveland Art Museum"},
+    {"name": "Cleveland Museum of Natural History"},
+    {"name": "Cleveland Botanical Garden"},
+    {"name": "Trattoria"},
+    {"name": "Guarino's"},
+    {"name": "Presti's"},
+    {"name": "Shaker Square"}
+  ],
+  "o": [
+    {"name": "Harpersfield"},
+    {"name": "M Cellars"},
+    {"name": "Burton"},
+    {"name": "Hale Farm & Village"},
+    {"name": "O25"}
+  ]
+}
