@@ -1,6 +1,16 @@
-import * as clevelandData from "./cleveland.json";
+import _clevelandData from "./cleveland.json";
+import { ClevelandData } from "./contentTypes";
+const clevelandData = _clevelandData as ClevelandData[];
 
-function getRandomSubarray(arr: Array<string>) {
+type GameContent = {
+  b: Array<ClevelandData>,
+  i: Array<ClevelandData>,
+  n: Array<ClevelandData>,
+  e: Array<ClevelandData>,
+  o: Array<ClevelandData>
+};
+
+function getRandomSubarray(arr: Array<any>) {
 
   var shuffled = arr.slice(0);
   var i = arr.length, temp, index;
@@ -15,19 +25,30 @@ function getRandomSubarray(arr: Array<string>) {
   return shuffled.slice(0, size);
 };
 
+function validateCategories(jsonCategories: Array<any>, validKeys: Array<string>) {
+  for (const key of jsonCategories) {
+    if (!validKeys.includes(key)) {
+      throw new Error("Invalid key: " + key);
+    }
+  }
+};
 export class BingoMaker {
+
   static create() {
-    const gameContent = {
+    const gameContent: GameContent = {
       b: [], i: [], n: [], e: [], o: []
     }
-    for (const [key, values] of Object.entries(clevelandData.default)) {
-      const sample = getRandomSubarray(values);
+
+    validateCategories(clevelandData.map( i => i.category), Object.keys(gameContent));
+
+    for (var [key, values] of Object.entries(gameContent)) {
+      const sample = getRandomSubarray(clevelandData.filter( i => i.category === key));
       for (var i in sample) {
-        gameContent[key].push(sample[i]);
+        values.push(sample[i]);
       }
     }
 
-    function transposeSelectedValues(matrix: string[][]) {
+    function transposeSelectedValues(matrix: ClevelandData[][]) {
       return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
     }
 

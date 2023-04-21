@@ -3,6 +3,7 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import Banner from './banner';
 import Cell from './cell';
 import { BingoMaker } from './content';
+import { ClevelandData } from './contentTypes';
 
 type HeaderCellProps = {
   contents: string
@@ -36,10 +37,6 @@ function Board({}) {
   const [gamePlay, setGamePlay] = useState(true);
   const [selectedIds, setSelectedIds] = useState(new Set<string>());
   const [bingoOptions, setBingoOptions] = useState(BingoMaker.create());
-  // const [bingoOptions, setBingoOptions] = useState(bingoShuffle());
-
-  const orderedCellKeys = Object.values(bingoOptions.boardMap)
-  const bingoValues = transposeSelectedValues(orderedCellKeys)
 
   function handleBingo(mode: string) {
     Alert.alert(
@@ -55,15 +52,17 @@ function Board({}) {
   useEffect(() => {
     if (!gamePlay) {return;}
     bingoOptions.boardValues.map(row => {
-      if (isRowBingo(row)) {
+      if (isRowBingo(row, bingoOptions.boardValues.indexOf(row))) {
         handleBingo("Row");
       }
     })
+
     Object.values(bingoOptions.boardMap).map(column => {
       if (isColumnBingo(column)) {
         handleBingo("Column");
       }
     })
+
     if (isCrossBingo()) {
       handleBingo("Cross");
     }
@@ -83,38 +82,49 @@ function Board({}) {
     setSelectedIds(new Set(selectedIds).add(id));
   }
 
-  function isRowBingo(row: Array<string>) {
-    return row.every(cell => selectedIds.has(cell));
+  function isRowBingo(row: Array<ClevelandData>, rowNum: number) {
+    return row.every(cell => selectedIds.has(cell.category + rowNum.toString()));
   };
 
-  function isColumnBingo(column: Array<string>) {
-    return column.every(cell => selectedIds.has(cell));
+  function isColumnBingo(column: Array<ClevelandData>) {
+
+    const indices = [...Array(column.length).keys()];
+    return indices.every(i => selectedIds.has(column[i].category + i.toString()));
   }
 
   function isCrossBingo() {
     const cross1 = [
-      bingoOptions.boardMap.b[0], bingoOptions.boardMap.i[1], bingoOptions.boardMap.n[2], bingoOptions.boardMap.e[3], bingoOptions.boardMap.o[4]
+      "b0", "i1", "n2", "e3", "o4"
     ];
     const cross2 = [
-      bingoOptions.boardMap.b[4], bingoOptions.boardMap.i[3], bingoOptions.boardMap.n[2], bingoOptions.boardMap.e[1], bingoOptions.boardMap.o[0]
+      "b4", "i3", "n2", "e1", "o0"
     ];
     return cross1.every(cell => selectedIds.has(cell)) || cross2.every(cell => selectedIds.has(cell));
   }
 
-  function transposeSelectedValues(matrix: string[][]) {
-    return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
+  function makeCellKey(cell: ClevelandData, row: Array<ClevelandData>) {
+    const rowIndex = row.findIndex(y => y.name === cell.name)
+    if (rowIndex === undefined) {
+      throw new Error("Could not find cell in row");
+    }
+    return cell.category.toString() + rowIndex.toString();
+  };
+
+  function makeRowKey(row: Array<ClevelandData>, board: Array<Array<ClevelandData>>) {
+    return "row_" + board.findIndex(y => y === row).toString();
   }
 
   const board = bingoOptions.boardValues.map(row =>
     (
-      <View style={styles.row} key={row[0]}>
+      <View style={styles.row} key={makeRowKey(row, bingoOptions.boardValues)}>
       {row.map(cell =>
         <Cell
           contents={cell}
+          id={makeCellKey(cell, bingoOptions.boardMap[cell.category])}
           selectedIds={selectedIds}
           addSelectedId={addSelectedId}
           gamePlay={gamePlay}
-          key={cell}
+          key={makeCellKey(cell, bingoOptions.boardMap[cell.category])}
         />
         )}
       </View>

@@ -1,36 +1,38 @@
 import { Alert, Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { ClevelandData } from './contentTypes';
 
 type TrackingFunction = (id: string) => void;
 
 export type CellProps = {
-  contents: string,
+  contents: ClevelandData,
+  id: string,
   selectedIds: Set<string>,
   addSelectedId: TrackingFunction,
   gamePlay: boolean
 };
 
-export default function Cell ({contents, selectedIds, addSelectedId, gamePlay}: CellProps) {
+export default function Cell ({contents, id, selectedIds, addSelectedId, gamePlay}: CellProps) {
 
   function getStyle() {
-    return selectedIds.has(contents) ? styles.selected : styles.available;
+    return selectedIds.has(id) ? styles.selected : styles.available;
   }
 
   function handlePress() {
     if (!gamePlay) {
       return;
     }
-    addSelectedId(contents);
+    addSelectedId(id);
   }
 
   function handleLongPress() {
-    Alert.alert("You long-pressed " + contents + "!");
+    Alert.alert("You long-pressed " + contents.name + "!");
   }
 
   return (
     <TouchableHighlight style={getStyle()} onPress={handlePress} onLongPress={handleLongPress}>
     <View style={getStyle()}>
       <Pressable onPress={handlePress} onLongPress={handleLongPress}>
-        <Text>{contents}</Text>
+        <Text>{contents.name}</Text>
       </Pressable>
     </View>
     </TouchableHighlight>

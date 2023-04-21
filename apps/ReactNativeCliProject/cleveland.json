@@ -1,37 +1,42 @@
-{
-  "b": [
-    "B1",
-    "B2",
-    "B3",
-    "B4",
-    "B5"
-  ],
-  "i": [
-    "I6",
-    "I7",
-    "I8",
-    "I9",
-    "I10"
-  ],
-  "n": [
-    "N11",
-    "N12",
-    "N13",
-    "N14",
-    "N15"
-  ],
-  "e": [
-    "E16",
-    "E17",
-    "E18",
-    "E19",
-    "E20"
-  ],
-  "o": [
-    "O21",
-    "O22",
-    "O23",
-    "O24",
-    "O25"
-  ]
-}
+[
+  {"name": "Brewery District", "category": "b"},
+  {"name": "Great Lakes Brewing", "category": "b"},
+  {"name": "Market Garden Brewery", "category": "b"},
+  {"name": "Fat Head's Brewery", "category": "b"},
+  {"name": "Great Lakes Distillery", "category": "b"},
+  {"name": "Bier Markt", "category": "b"},
+  {"name": "Li Wah", "category": "b"},
+  {"name": "Asian Fest", "category": "b"},
+  {"name": "Superior Pho", "category": "b"},
+  {"name": "Tommy's", "category": "b"},
+  {"name": "Lucky's", "category": "b"},
+  {"name": "Inn on Coventry", "category": "b"},
+  {"name": "Lakeview Cemetery", "category": "b"},
+  {"name": "Chagrin Falls", "category": "b"},
+  {"name": "Harp", "category": "i"},
+  {"name": "Pier W", "category": "i"},
+  {"name": "Lakewood Truck Park", "category": "i"},
+  {"name": "Solstice Steps", "category": "i"},
+  {"name":"European Imports", "category": "i"},
+  {"name": "Red Line Greenway", "category": "i"},
+  {"name": "Rood", "category": "n"},
+  {"name": "41 North", "category": "n"},
+  {"name": "RTA to Downtown", "category": "n"},
+  {"name": "Soldiers & Sailors", "category": "n"},
+  {"name": "Cleveland Monsters Hockey", "category": "n"},
+  {"name": "Cleveland Guardians Baseball", "category": "n"},
+  {"name": "Cleveland Cavaliers Basketball", "category": "n"},
+  {"name": "Cleveland Browns Football", "category": "n"},
+  {"name": "Cleveland Art Museum", "category": "e"},
+  {"name": "Cleveland Museum of Natural History", "category": "e"},
+  {"name": "Cleveland Botanical Garden", "category": "e"},
+  {"name": "Trattoria", "category": "e"},
+  {"name": "Guarino's", "category": "e"},
+  {"name": "Presti's", "category": "e"},
+  {"name": "Shaker Square", "category": "e"},
+  {"name": "Harpersfield", "category": "o"},
+  {"name": "M Cellars", "category": "o"},
+  {"name": "Burton", "category": "o"},
+  {"name": "Hale Farm & Village", "category": "o"},
+  {"name": "O25", "category": "o"}
+]
