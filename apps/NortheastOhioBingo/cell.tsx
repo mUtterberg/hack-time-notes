@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
   availableCell: {
     alignItems: 'center',
     justifyContent: 'center',
-    // borderWidth: 1,
     flex: 1,
     height: 40,
     backgroundColor: 'yellow'
@@ -83,7 +82,6 @@ const styles = StyleSheet.create({
   selectedCell: {
     alignItems: 'center',
     justifyContent: 'center',
-    // borderWidth: 1,
     flex: 1,
     height: 40,
     backgroundColor: 'green'
