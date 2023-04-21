@@ -35,7 +35,7 @@ function HeaderRow() {
 
 function Board({}) {
   const [gamePlay, setGamePlay] = useState(true);
-  const [selectedIds, setSelectedIds] = useState(new Set<string>("n2"));
+  const [selectedIds, setSelectedIds] = useState(new Set(["n2"]));
   const [bingoOptions, setBingoOptions] = useState(BingoMaker.create());
 
   function handleBingo(mode: string) {
@@ -73,7 +73,7 @@ function Board({}) {
   }
 
   function handleNewGame() {
-    setSelectedIds(new Set<string>("n2"));
+    setSelectedIds(new Set(["n2"]));
     selectNewCards();
     setGamePlay(true);
   }
