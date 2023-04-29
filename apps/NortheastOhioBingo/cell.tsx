@@ -1,4 +1,5 @@
-import { Alert, Linking, Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { Alert, Linking, Pressable, Text, TouchableHighlight, View } from 'react-native';
+import { cellStyles } from './styles';
 import { ClevelandData } from './contentTypes';
 
 type TrackingFunction = (id: string) => void;
@@ -14,11 +15,11 @@ export type CellProps = {
 export default function Cell ({contents, id, selectedIds, addSelectedId, gamePlay}: CellProps) {
 
   function getHighlightStyle() {
-    return selectedIds.has(id) ? styles.selectedTouchable : styles.availableTouchable;
+    return selectedIds.has(id) ? cellStyles.selectedTouchable : cellStyles.availableTouchable;
   }
 
   function getPressableStyle() {
-    return selectedIds.has(id) ? styles.selectedCell : styles.availableCell;
+    return selectedIds.has(id) ? cellStyles.selectedCell : cellStyles.availableCell;
   }
 
   function handlePress() {
@@ -30,10 +31,11 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
 
   function handleMoreInfo() {
     if (contents.url !== undefined) {
+      const url = contents.url
       Alert.alert(
         contents.name,
         contents.notes,
-        [{text: "Go to " + contents.url, onPress: () => Linking.openURL(contents.url)}]
+        [{text: "Go to " + contents.url, onPress: () => Linking.openURL(url)}]
         );
     } else if (contents.notes !== undefined) {
     Alert.alert(
@@ -64,43 +66,9 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
     <TouchableHighlight style={getHighlightStyle()} onPress={handlePress} onLongPress={handleLongPress}>
     <View style={getPressableStyle()}>
       <Pressable onPress={handlePress} onLongPress={handleLongPress}>
-        <Text style={styles.text}>{contents.displayName}</Text>
+        <Text style={cellStyles.text}>{contents.displayName}</Text>
       </Pressable>
     </View>
     </TouchableHighlight>
   );
 };
-
-const styles = StyleSheet.create({
-  availableCell: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: 80,
-  },
-  selectedCell: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: 80,
-  },
-  availableTouchable: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    flex: 1,
-    height: 80,
-    backgroundColor: '#7E252D'
-  },
-  selectedTouchable: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    flex: 1,
-    height: 80,
-    backgroundColor: '#5F1C48'
-  },
-  text: {
-    color: 'white',
-  }
-});

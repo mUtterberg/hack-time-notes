@@ -1,37 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Alert, useColorScheme, View } from 'react-native';
 import Banner from './banner';
 import Cell from './cell';
 import { BingoMaker } from './content';
 import { ClevelandData } from './contentTypes';
-
-type HeaderCellProps = {
-  contents: string
-};
-
-function HeaderCell ({ contents }: HeaderCellProps) {
-  return (
-    <>
-    <View style={styles.headerCell}>
-      <Text>{contents}</Text>
-    </View>
-    </>
-  )
-};
-  
-function HeaderRow() {
-  const bineo = ['B', 'I', 'N', 'E', 'O'];
-  const headers = bineo.map(letter => 
-    <HeaderCell contents={letter} key={letter}/>
-  );
-  return (
-    <>
-    <View style={styles.headerRow}>
-      {headers}
-    </View>
-    </>
-  )
-};
+import { boardStyles } from './styles';
 
 function Board({}) {
   const [gamePlay, setGamePlay] = useState(true);
@@ -91,17 +64,33 @@ function Board({}) {
   }
 
   function isBlackout() {
-    return bingoOptions.boardValues.every(row => row.every(cell => selectedIds.has(getCellId(cell, bingoOptions.boardValues.indexOf(row)))));
+    return bingoOptions.boardValues.every(
+      row => row.every(
+        cell => selectedIds.has(
+          getCellId(
+            cell, bingoOptions.boardValues.indexOf(row)
+          )
+        )
+      )
+    );
   }
 
   function isRowBingo(row: Array<ClevelandData>, rowNum: number) {
-    return row.every(cell => selectedIds.has(getCellId(cell, rowNum)));
+    return row.every(
+      cell => selectedIds.has(
+        getCellId(cell, rowNum)
+      )
+    );
   };
 
   function isColumnBingo(column: Array<ClevelandData>) {
 
     const indices = [0, 1, 2, 3, 4];
-    return indices.every(rowNum => selectedIds.has(getCellId(column[rowNum], rowNum)));
+    return indices.every(
+      rowNum => selectedIds.has(
+        getCellId(column[rowNum], rowNum)
+      )
+    );
   }
 
   function isCrossBingo() {
@@ -114,16 +103,17 @@ function Board({}) {
     return cross1.every(cell => selectedIds.has(cell)) || cross2.every(cell => selectedIds.has(cell));
   }
 
+  // Cell ID format: b0, b1, b2, ..., o2, o3, o4
   function getCellId(cell: ClevelandData, rowNum: number) {
     return cell.category + rowNum.toString();
   }
 
-  function makeCellKey(cell: ClevelandData, row: Array<ClevelandData>) {
-    const rowIndex = row.findIndex(y => y.name === cell.name)
-    if (rowIndex === undefined) {
-      throw new Error("Could not find cell in row");
+  function makeCellKey(cell: ClevelandData, col: Array<ClevelandData>) {
+    const rowNum = col.findIndex(y => y.name === cell.name)
+    if (rowNum === undefined) {
+      throw new Error("Could not find cell in column");
     }
-    return cell.category.toString() + rowIndex.toString();
+    return getCellId(cell, rowNum);
   };
 
   function makeRowKey(row: Array<ClevelandData>, board: Array<Array<ClevelandData>>) {
@@ -132,7 +122,7 @@ function Board({}) {
 
   const board = bingoOptions.boardValues.map(row =>
     (
-      <View style={styles.row} key={makeRowKey(row, bingoOptions.boardValues)}>
+      <View style={boardStyles.row} key={makeRowKey(row, bingoOptions.boardValues)}>
       {row.map(cell =>
         <Cell
           contents={cell}
@@ -150,33 +140,9 @@ function Board({}) {
   return (
     <>
     <Banner handleNewGame={handleNewGame} gameMode={gameMode} setGameMode={setGameMode} />
-    {/* <HeaderRow /> */}
     {board}
     </>
   )
 }
 
 export default Board;
-
-const styles = StyleSheet.create({
-  headerRow: {
-    flexDirection: 'row',
-    padding: 2,
-  },
-  headerCell: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    flex: 1,
-    height: 40,
-    fontWeight: 'bold',
-    backgroundColor: 'burntsienna'
-  },
-  row: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: 'black',
-    flexDirection: 'row',
-    backgroundColor: '#FBF4F4'
-  }
-});
