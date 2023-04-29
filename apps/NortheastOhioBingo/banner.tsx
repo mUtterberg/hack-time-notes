@@ -17,10 +17,14 @@ export default function Banner({ handleNewGame, gameMode, setGameMode }: { handl
 
   return (
     <View style={styles.banner}>
-      <Text>Northeast Ohio Bingo</Text>
-      <View style={styles.newGame}>
-        <Pressable onPress={handleNewGame} onLongPress={handleLongPress}>
-          <Text>New Game</Text>
+      <Text style={styles.title}>Northeast Ohio Bingo</Text>
+      <View style={styles.buttonRow}>
+        <Pressable style={styles.button} onPress={handleNewGame} onLongPress={handleLongPress}>
+          <Text style={styles.buttonText}>New Game?</Text>
+        </Pressable>
+        <Pressable style={styles.button} onPress={handleLongPress} onLongPress={handleLongPress}>
+          <Text style={styles.buttonText}>Change mode?</Text>
+          <Text style={styles.buttonText}>(Mode: {gameMode})</Text>
         </Pressable>
       </View>
     </View>
@@ -30,21 +34,48 @@ export default function Banner({ handleNewGame, gameMode, setGameMode }: { handl
 const styles = StyleSheet.create({
   banner: {
     flex: 1,
-    backgroundColor: 'lightpink',
+    backgroundColor: '#7E252D',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
     margin: 10,
   },
-  newGame: {
+  title: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  buttonRow: {
     flex: 1,
-    borderWidth: 1,
-    backgroundColor: 'lightpink',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     fontWeight: 'bold',
+  },
+  button: {
+    color: "black",
+    boxShadow: "4px 8px ",
+    shadowOffset: {
+      width: 4,
+      height: 8,
+    },
+    shadowColor: "#5F1C48",
+    shadowOpacity: 0.5,
+    elevation: 20,
+    shadowRadius: 4,
+    borderWidth: 1,
     height: 60,
     padding: 10,
     margin: 10,
+    backgroundColor: 'burntsienna',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: 'bold',
+    flex: 1,
+    borderColor: 'black',
+  },
+  buttonText: {
+    alignItems: 'center',
+    color: 'black',
   }
 });

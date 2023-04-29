@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import Banner from './banner';
 import Cell from './cell';
 import { BingoMaker } from './content';
@@ -38,6 +38,7 @@ function Board({}) {
   const [gameMode, setGameMode] = useState("simple");
   const [selectedIds, setSelectedIds] = useState(new Set(["n2"]));
   const [bingoOptions, setBingoOptions] = useState(BingoMaker.create());
+  const isDarkMode = useColorScheme() === 'dark';
 
   function handleBingo(mode: string) {
     Alert.alert(
@@ -149,7 +150,7 @@ function Board({}) {
   return (
     <>
     <Banner handleNewGame={handleNewGame} gameMode={gameMode} setGameMode={setGameMode} />
-    <HeaderRow />
+    {/* <HeaderRow /> */}
     {board}
     </>
   )
@@ -160,6 +161,7 @@ export default Board;
 const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
+    padding: 2,
   },
   headerCell: {
     alignItems: 'center',
@@ -168,16 +170,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     fontWeight: 'bold',
-    backgroundColor: 'yellow'
+    backgroundColor: 'burntsienna'
   },
   row: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
     borderColor: 'black',
     flexDirection: 'row',
-    height: 50,
-    padding: 2,
-    backgroundColor: 'pink'
+    backgroundColor: '#FBF4F4'
   }
 });

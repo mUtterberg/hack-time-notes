@@ -22,7 +22,7 @@ function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? "#7E252D" : "#FBF4F4",
   };
 
   return (
@@ -44,7 +44,7 @@ function App(): JSX.Element {
         </View>
         <View
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            backgroundColor: isDarkMode ? "#7E252D" : Colors.white,
           }}>
           <Board />
         </View>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
     flex: 1,
-  },
+  }
 });
 
 export default App;

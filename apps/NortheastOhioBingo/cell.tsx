@@ -64,7 +64,7 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
     <TouchableHighlight style={getHighlightStyle()} onPress={handlePress} onLongPress={handleLongPress}>
     <View style={getPressableStyle()}>
       <Pressable onPress={handlePress} onLongPress={handleLongPress}>
-        <Text>{contents.displayName}</Text>
+        <Text style={styles.text}>{contents.displayName}</Text>
       </Pressable>
     </View>
     </TouchableHighlight>
@@ -76,30 +76,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    height: 40,
-    backgroundColor: 'yellow'
+    height: 80,
   },
   selectedCell: {
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    height: 40,
-    backgroundColor: 'green'
+    height: 80,
   },
   availableTouchable: {
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     flex: 1,
-    height: 40,
-    backgroundColor: 'yellow'
+    height: 80,
+    backgroundColor: '#7E252D'
   },
   selectedTouchable: {
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
     flex: 1,
-    height: 40,
-    backgroundColor: 'green'
+    height: 80,
+    backgroundColor: '#5F1C48'
   },
+  text: {
+    color: 'white',
+  }
 });
