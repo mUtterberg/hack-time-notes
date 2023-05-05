@@ -3,7 +3,6 @@ import { createRealmContext } from '@realm/react';
 import { SavedGame } from "./contentTypes";
 
 class GameState extends Realm.Object<GameState> {
-    _id!: Realm.BSON.ObjectId;
     selectedIds!: string[];
     boardMap!: string;
     static schema = {
@@ -14,33 +13,35 @@ class GameState extends Realm.Object<GameState> {
             selectedIds: "string[]",
             boardMap: "string[]"
         },
-        primaryKey: "_id"
     };
 };
 
-export class Games extends Realm.Object<Games> {
+export class Game extends Realm.Object<Game> {
   _id!: Realm.BSON.ObjectId;
   name!: string;
-  gameContents!: string;
+  gameState!: GameState;
    static schema = {
-    name: "Games",
+    name: "Game",
     properties: {
       _id: "objectId",
       name: "string",
-      gameState: "GameState"
+      gameState: "GameState",
     },
     primaryKey: "_id"
   };
 }
 
 const realmConfig: Realm.Configuration = {
-    schema: [Games],
+    schema: [Game, GameState],
+    // DEV ONLY
+    deleteRealmIfMigrationNeeded: true,
 };
 
-export const {RealmProvider, useRealm, useObject, useQuery} = createRealmContext(realmConfig);
+export const GameContext = createRealmContext(realmConfig);
+// export const {RealmProvider, useRealm, useObject, useQuery} = createRealmContext(realmConfig);
 
 export function loadSavedGames(realm: Realm) {
   console.log("Loading saved games");
-  const savedGames = realm.objects<Games>('Games');
+  const savedGames = realm.objects<Game>('Game');
   return savedGames;
 }

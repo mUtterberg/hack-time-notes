@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert, useColorScheme, View } from 'react-native';
-import { RealmProvider } from './contentContext';
-import { DatabaseMonitor } from './dbDemo';
+import { GameContext } from './gameContext';
 import Banner from './banner';
 import Cell from './cell';
 import { BingoMaker } from './content';
@@ -148,17 +147,16 @@ function Board({}) {
 
   return (
     <>
-    {/* Expose a realm instance to your app */}
-    <RealmProvider>
-      <DatabaseMonitor name={'Demo'} />
+    <GameContext.RealmProvider>
+
       <Banner
         handleNewGame={handleNewGame}
         gameMode={gameMode}
         setGameMode={setGameMode}
         loadSavedGame={true}
-      />
+        />
       {board}
-    </RealmProvider>
+    </GameContext.RealmProvider>
     </>
   )
 }
