@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Alert, useColorScheme, View } from 'react-native';
+import { RealmProvider } from './contentContext';
+import { DatabaseMonitor } from './dbDemo';
 import Banner from './banner';
 import Cell from './cell';
 import { BingoMaker } from './content';
@@ -12,10 +14,12 @@ function Board({}) {
   const [selectedIds, setSelectedIds] = useState(new Set(["n2"]));
   const [bingoOptions, setBingoOptions] = useState(BingoMaker.create());
   const isDarkMode = useColorScheme() === 'dark';
+  const [winningCells, setWinningCells] = useState(new Set<string>)
 
   function handleBingo(mode: string) {
+    console.log("Bingo win type: " + mode);
     Alert.alert(
-      "Bingo! (" + mode + ")",
+      "BINGO",
       "You won! New game?",
       [
         {text: 'Yes!', onPress: () => handleNewGame()},
@@ -29,6 +33,10 @@ function Board({}) {
     if (gameMode === "simple") {
     bingoOptions.boardValues.map(row => {
       if (isRowBingo(row, bingoOptions.boardValues.indexOf(row))) {
+        // TODO: How to safely set winning cells?
+        // setWinningCells(
+        //   new Set(['b0', 'i0', 'n0'])
+        // )
         handleBingo("Row");
       }
     })
@@ -130,6 +138,7 @@ function Board({}) {
           selectedIds={selectedIds}
           addSelectedId={addSelectedId}
           gamePlay={gamePlay}
+          winningIds={winningCells}
           key={makeCellKey(cell, bingoOptions.boardMap[cell.category])}
         />
         )}
@@ -139,8 +148,17 @@ function Board({}) {
 
   return (
     <>
-    <Banner handleNewGame={handleNewGame} gameMode={gameMode} setGameMode={setGameMode} />
-    {board}
+    {/* Expose a realm instance to your app */}
+    <RealmProvider>
+      <DatabaseMonitor name={'Demo'} />
+      <Banner
+        handleNewGame={handleNewGame}
+        gameMode={gameMode}
+        setGameMode={setGameMode}
+        loadSavedGame={true}
+      />
+      {board}
+    </RealmProvider>
     </>
   )
 }

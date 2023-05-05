@@ -10,11 +10,19 @@ export type CellProps = {
   selectedIds: Set<string>,
   addSelectedId: TrackingFunction,
   gamePlay: boolean
+  winningIds: Set<string>
 };
 
-export default function Cell ({contents, id, selectedIds, addSelectedId, gamePlay}: CellProps) {
+export default function Cell ({contents, id, selectedIds, addSelectedId, gamePlay, winningIds}: CellProps) {
 
   function getHighlightStyle() {
+    // var returnStyle = cellStyles.availableTouchable;
+    // if (!gamePlay && winningIds.has(id)) {
+    //   returnStyle = cellStyles.winningTouchable;
+    // } else if (selectedIds.has(id)) {
+    //   returnStyle = cellStyles.selectedTouchable;
+    // }
+    // return returnStyle;
     return selectedIds.has(id) ? cellStyles.selectedTouchable : cellStyles.availableTouchable;
   }
 

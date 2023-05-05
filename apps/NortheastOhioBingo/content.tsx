@@ -1,6 +1,6 @@
 import _clevelandData from "./cleveland.json";
 import { ClevelandData, GameContent } from "./contentTypes";
-const clevelandData = _clevelandData as ClevelandData[];
+export const clevelandData = _clevelandData as ClevelandData[];
 
 function getRandomSubarray(arr: Array<any>) {
 

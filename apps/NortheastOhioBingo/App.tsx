@@ -24,6 +24,7 @@ function App(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? "#7E252D" : "#FBF4F4",
   };
+  console.log("Populate starter DB here?");
 
   return (
     <SafeAreaView style={backgroundStyle}>

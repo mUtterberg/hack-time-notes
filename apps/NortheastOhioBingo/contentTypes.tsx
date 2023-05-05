@@ -14,3 +14,8 @@ export type GameContent = {
   e: Array<ClevelandData>,
   o: Array<ClevelandData>
 };
+
+export type SavedGame = {
+  boardMap: GameContent,
+  selectedIds: Array<string>,
+}

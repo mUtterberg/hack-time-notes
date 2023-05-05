@@ -79,6 +79,12 @@ export const cellStyles = StyleSheet.create({
     flex: 1,
     height: 80,
   },
+  winningCell: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    height: 80,
+  },
   availableTouchable: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -90,6 +96,15 @@ export const cellStyles = StyleSheet.create({
   selectedTouchable: {
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    flex: 1,
+    height: 80,
+    backgroundColor: '#5F1C48'
+  },
+  winningTouchable: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'limegreen',
     borderWidth: 1,
     flex: 1,
     height: 80,
