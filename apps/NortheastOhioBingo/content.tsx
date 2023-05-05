@@ -1,7 +1,7 @@
 import _clevelandData from "./cleveland.json";
 import { ClevelandData, GameContent } from "./contentTypes";
 export const clevelandData = _clevelandData as ClevelandData[];
-import { GameContext } from "./gameContext";
+import { Game } from "./gameContext";
 
 function getRandomSubarray(arr: Array<any>) {
 
@@ -31,6 +31,13 @@ function transposeSelectedValues(matrix: ClevelandData[][]) {
 };
 
 export class BingoMaker {
+
+  static load(realm: Realm) {
+    const savedGames = realm.objects<Game>('Game');
+    console.log(savedGames[0].gameState.boardMap)
+    console.log(savedGames[0].gameState.boardMap.b)
+    return this.create();
+  }
 
   static create() {
     const gameContent: GameContent = {

@@ -16,6 +16,7 @@ import {
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
+import { GameContext } from './gameContext';
 import Board from './bingo';
 
 function App(): JSX.Element {
@@ -24,9 +25,9 @@ function App(): JSX.Element {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? "#7E252D" : "#FBF4F4",
   };
-  console.log("Populate starter DB here?");
 
   return (
+    <GameContext.RealmProvider>
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
@@ -51,6 +52,7 @@ function App(): JSX.Element {
         </View>
       </ScrollView>
     </SafeAreaView>
+    </GameContext.RealmProvider>
   );
 }
 
