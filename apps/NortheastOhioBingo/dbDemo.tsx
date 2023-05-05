@@ -18,6 +18,14 @@ function loadClevelandData(realm: Realm) {
   });
 };
 
+function deleteAllActivities(realm: Realm) {
+  console.log("Deleting all activities");
+  realm.write(() => {
+    realm.deleteAll();
+  });
+  return
+}
+
 function createActivity(name: String, realm: Realm) {
   console.log("Creating activity ("+name+")");
   realm.write(() => {
@@ -54,7 +62,13 @@ export function DatabaseMonitor({name}: DatabaseMonitorProps) {
           style={bannerStyles.button}
           onPress={() => {loadClevelandData(realm)}}
         >
-          <Text style={bannerStyles.buttonText}>Reset activity data</Text>
+          <Text style={bannerStyles.buttonText}>Add demo data</Text>
+        </Pressable>
+        <Pressable
+          style={bannerStyles.button}
+          onPress={() => {deleteAllActivities(realm)}}
+        >
+          <Text style={bannerStyles.buttonText}>Delete demo data</Text>
         </Pressable>
       </View>
       <TextInput
