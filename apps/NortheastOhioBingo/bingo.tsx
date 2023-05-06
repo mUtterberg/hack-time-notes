@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert, useColorScheme, View } from 'react-native';
-import { GameContext, Game } from './gameContext';
+import { GameContext, Game, BoardMap } from './gameContext';
 import Banner from './banner';
 import Cell from './cell';
 import { BingoMaker } from './content';
@@ -10,28 +10,21 @@ import { boardStyles } from './styles';
 function updateOrCreateSavedGame(realm: Realm, mode: string, selectedIds: Set<string>, boardMap: GameContent) {
   const savedGames = realm.objects<Game>('Game');
   if (savedGames.length === 0) {
-    console.log("Creating new game");
     realm.write(() => {
       realm.create('Game', {
+        _id: new Realm.BSON.ObjectId(),
         name: "New Game",
         mode: mode,
-        _id: new Realm.BSON.ObjectId(),
-        gameState: {
-          _id: new Realm.BSON.ObjectId(),
-          selectedIds: Array.from(selectedIds),
-          boardMap: boardMap,
-        }
+        selectedIds: Array.from(selectedIds),
+        boardMap: boardMap,
       });
     });
   } else {
-    console.log("Saved games: " + savedGames.length);
-    console.log("Saving game state");
     realm.write(() => {
-      savedGames[0].gameState.selectedIds = Array.from(selectedIds);
+      savedGames[0].mode = mode;
+      savedGames[0].selectedIds = Array.from(selectedIds);
+      savedGames[0].boardMap = new BoardMap(realm, boardMap);
     });
-    console.log(
-      savedGames[0].gameState
-    )
   };
 };
 
@@ -41,7 +34,7 @@ function loadOrCreateGame(realm: Realm) {
     console.log("Creating new game");
     return BingoMaker.create()
   } else {
-    console.log("Loading saved game (eventually)");
+    console.log("Loading saved game");
     return BingoMaker.load(realm)
   };
 };
@@ -51,19 +44,27 @@ function loadOrCreateInitialSelections(realm: Realm) {
   if (savedGames.length === 0) {
     return new Set(["n2"]);
   } else {
-    console.log("Loading saved options");
-    return new Set(savedGames[0].gameState.selectedIds);
+    return new Set(savedGames[0].selectedIds);
+  };
+};
+
+function loadOrCreateInitialMode(realm: Realm) {
+  const savedGames = realm.objects<Game>('Game');
+  if (savedGames.length === 0) {
+    return "simple";
+  } else {
+    return savedGames[0].mode;
   };
 };
 
 function Board({}) {
-  const [bingoOptions, setBingoOptions] = useState(loadOrCreateGame(GameContext.useRealm()));
+  const realm = GameContext.useRealm();
+  const [bingoOptions, setBingoOptions] = useState(loadOrCreateGame(realm));
+  const [gameMode, setGameMode] = useState(loadOrCreateInitialMode(realm));
+  const [selectedIds, setSelectedIds] = useState(loadOrCreateInitialSelections(realm));
   const [gamePlay, setGamePlay] = useState(true);
-  const [gameMode, setGameMode] = useState("simple");
-  const [selectedIds, setSelectedIds] = useState(loadOrCreateInitialSelections(GameContext.useRealm()));
   const isDarkMode = useColorScheme() === 'dark';
   const [winningCells, setWinningCells] = useState(new Set<string>)
-  const realm = GameContext.useRealm();
 
   function handleBingo(mode: string) {
     console.log("Bingo win type: " + mode);

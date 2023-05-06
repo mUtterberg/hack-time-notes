@@ -3,7 +3,6 @@ import { bannerStyles } from './styles';
 
 export default function Banner({ handleNewGame, gameMode, setGameMode }: { handleNewGame: () => void, gameMode: string, setGameMode: (mode: string) => void }) {
   function handleLongPress() {
-    console.log("Current mode: " + gameMode);
     Alert.alert(
       "Game Mode: " + gameMode,
       "Change game mode?",
@@ -13,7 +12,6 @@ export default function Banner({ handleNewGame, gameMode, setGameMode }: { handl
         { text: 'Cancel', onPress: () => {}, style: 'cancel' }
       ]
     )
-    console.log("New mode: " + gameMode);
   }
   const buttons = (
     <>

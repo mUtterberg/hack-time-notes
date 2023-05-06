@@ -34,9 +34,16 @@ export class BingoMaker {
 
   static load(realm: Realm) {
     const savedGames = realm.objects<Game>('Game');
-    console.log(savedGames[0].gameState.boardMap)
-    console.log(savedGames[0].gameState.boardMap.b)
-    return this.create();
+    const gameContent: GameContent = {
+      b: [], i: [], n: [], e: [], o: []
+    }
+    for (var [key, values] of Object.entries(gameContent)) {
+      for (var i in savedGames[0].boardMap[key]) {
+        values.push(savedGames[0].boardMap[key][i]);
+      }
+    }
+    console.log("Top left corner: "+gameContent.b[0].displayName)
+    return {boardMap: gameContent, boardValues: transposeSelectedValues(Object.values(gameContent))};
   }
 
   static create() {

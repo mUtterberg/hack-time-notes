@@ -1,6 +1,7 @@
 import { Alert, Linking, Pressable, Text, TouchableHighlight, View } from 'react-native';
 import { cellStyles } from './styles';
 import { ClevelandData } from './contentTypes';
+// import { ClevelandActivity } from './gameContext';
 
 type TrackingFunction = (id: string) => void;
 
