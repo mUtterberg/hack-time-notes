@@ -1,153 +1,128 @@
 import { useEffect, useState } from 'react';
-import { Alert, useColorScheme, View } from 'react-native';
-import { GameContext, Game, BoardMap } from './gameContext';
+import { Alert, useColorScheme } from 'react-native';
+import { GameContext, Game } from './gameContext';
 import Banner from './banner';
-import Cell from './cell';
-import { BingoMaker } from './content';
-import { ClevelandData, GameContent } from './contentTypes';
-import { boardStyles } from './styles';
+import { createGame, setGamePlay } from './gameData';
+import Playable from './playable';
 
-function updateOrCreateSavedGame(realm: Realm, mode: string, selectedIds: Set<string>, boardMap: GameContent) {
+function getSavedGameIfAny(realm: Realm) {
   const savedGames = realm.objects<Game>('Game');
-  if (savedGames.length === 0) {
-    realm.write(() => {
-      realm.create('Game', {
-        _id: new Realm.BSON.ObjectId(),
-        name: "New Game",
-        mode: mode,
-        selectedIds: Array.from(selectedIds),
-        boardMap: boardMap,
-      });
-    });
+  console.log("Found "+savedGames.length+" saved games")
+  if (savedGames.filtered('active = $0', true).length === 0) {
+    const newGame = createGame(realm);
+    console.log(newGame)
+    console.log("Created new game with id "+newGame._id)
+    return newGame;
   } else {
-    realm.write(() => {
-      savedGames[0].mode = mode;
-      savedGames[0].selectedIds = Array.from(selectedIds);
-      savedGames[0].boardMap = new BoardMap(realm, boardMap);
-    });
+    console.log("Loading last of "+savedGames.filtered('active = $0', true).length+" active games")
+    console.log(savedGames.filtered('active = $0', false).length+" inactive games")
+    const activeGames = savedGames.filtered('active = $0', true);
+    return activeGames[activeGames.length - 1];
   };
-};
+}
 
-function loadOrCreateGame(realm: Realm) {
-  const savedGames = realm.objects<Game>('Game');
-  if (savedGames.length === 0) {
-    console.log("Creating new game");
-    return BingoMaker.create()
-  } else {
-    console.log("Loading saved game");
-    return BingoMaker.load(realm)
-  };
-};
-
-function loadOrCreateInitialSelections(realm: Realm) {
-  const savedGames = realm.objects<Game>('Game');
-  if (savedGames.length === 0) {
-    return new Set(["n2"]);
-  } else {
-    return new Set(savedGames[0].selectedIds);
-  };
-};
-
-function loadOrCreateInitialMode(realm: Realm) {
-  const savedGames = realm.objects<Game>('Game');
-  if (savedGames.length === 0) {
-    return "simple";
-  } else {
-    return savedGames[0].mode;
-  };
-};
-
-function Board({}) {
+export default function Bingo({}) {
   const realm = GameContext.useRealm();
-  const [bingoOptions, setBingoOptions] = useState(loadOrCreateGame(realm));
-  const [gameMode, setGameMode] = useState(loadOrCreateInitialMode(realm));
-  const [selectedIds, setSelectedIds] = useState(loadOrCreateInitialSelections(realm));
-  const [gamePlay, setGamePlay] = useState(true);
+  const [gameId, setGameId] = useState(getSavedGameIfAny(realm)._id);
+  const game = GameContext.useObject(Game, gameId);
   const isDarkMode = useColorScheme() === 'dark';
   const [winningCells, setWinningCells] = useState(new Set<string>)
 
   function handleBingo(mode: string) {
     console.log("Bingo win type: " + mode);
+    setGamePlay(realm, game, false)
     Alert.alert(
       "BINGO",
       "You won! New game?",
       [
         {text: 'Yes!', onPress: () => handleNewGame()},
-        {text: 'No', onPress: () => setGamePlay(false), style: 'cancel'}
+        {text: 'No', onPress: () => setGamePlay(realm, game, false), style: 'cancel'}
       ]
       );
   }
 
+  // THIS RUNS AFTER EVERY RENDER
   useEffect(() => {
-    if (!gamePlay) {return;}
-    updateOrCreateSavedGame(realm, gameMode, selectedIds, bingoOptions.boardMap);
-    if (gameMode === "simple") {
-    bingoOptions.boardValues.map(row => {
-      if (isRowBingo(row, bingoOptions.boardValues.indexOf(row))) {
-        // TODO: How to safely set winning cells?
-        // setWinningCells(
-        //   new Set(['b0', 'i0', 'n0'])
-        // )
-        handleBingo("Row");
-      }
-    })
-
-    Object.values(bingoOptions.boardMap).map(column => {
-      if (isColumnBingo(column)) {
-        handleBingo("Column");
-      }
-    })
-
-    if (isCrossBingo()) {
-      handleBingo("Cross");
+    if (!game?.active) {return;}
+    if (game?.selectedIds === undefined) {
+      console.log("Selected ids undefined")
     }
-  } else if (gameMode === "blackout") {
-    if (isBlackout()) {
-      handleBingo("Blackout");
+
+    if (game?.mode === "simple") {
+      // Check for row bingo
+      [0, 1, 2, 3, 4].map((row, _) => {
+        if (isRowBingo(row)) {
+          // TODO: How to safely set winning cells?
+          // setWinningCells(
+          //   new Set(['b0', 'i0', 'n0'])
+          // )
+          handleBingo("Row");
+        }
+      });
+
+      // Check for column bingo
+      ['b', 'i', 'n', 'e', 'o'].map((column, _) => {
+        if (isColumnBingo(column)) {
+          handleBingo("Column");
+        }
+      });
+
+      if (isCrossBingo()) {
+        handleBingo("Cross");
+      }
+    } else if (game?.mode === "blackout") {
+      if (isBlackout()) {
+        handleBingo("Blackout");
+      }
     }
-  }
   });
+  // END OF RUNS AFTER EVERY RENDER
 
   function selectNewCards() {
-    setBingoOptions(BingoMaker.create());
+    setGamePlay(
+      realm,
+      game,
+      false
+      );
+    const newGame = createGame(realm);
+    setGameId(newGame._id);
   }
 
   function handleNewGame() {
-    setSelectedIds(new Set(["n2"]));
     selectNewCards();
-    setGamePlay(true);
+    setGamePlay(realm, game, true);
   }
 
-  function addSelectedId(id: string) {
-    setSelectedIds(new Set(selectedIds).add(id));
+  function clearGames() {
+    realm.write(() => {
+      const games = realm.objects<Game>('Game').filtered('_id != $0', gameId);
+      console.log("Deleting "+games.length+" games")
+      games.forEach(game => {
+        console.log("Deleting game with id "+game._id)
+        realm.delete(
+          game
+        );
+      })
+    });
   }
 
   function isBlackout() {
-    return bingoOptions.boardValues.every(
-      row => row.every(
-        cell => selectedIds.has(
-          getCellId(
-            cell, bingoOptions.boardValues.indexOf(row)
-          )
-        )
-      )
-    );
+    return game?.boardValues.every(cell => game?.selectedIds.has(cell.position));
   }
 
-  function isRowBingo(row: Array<ClevelandData>, rowNum: number) {
-    return row.every(
-      cell => selectedIds.has(
-        getCellId(cell, rowNum)
+  function isRowBingo(rowNum: number) {
+    return game?.boardValues.filter(cell => cell.position[1] === rowNum.toString()).every(
+      cell => game?.selectedIds.has(
+        cell.position
       )
     );
   };
 
-  function isColumnBingo(column: Array<ClevelandData>) {
+  function isColumnBingo(column: string) {
 
-    const indices = [0, 1, 2, 3, 4];
-    return indices.every(
-      rowNum => selectedIds.has(
-        getCellId(column[rowNum], rowNum)
+    return game?.boardValues.filter(cell => cell.position[0] === column).every(
+      cell => game?.selectedIds.has(
+        cell.position
       )
     );
   }
@@ -159,54 +134,30 @@ function Board({}) {
     const cross2 = [
       "b4", "i3", "n2", "e1", "o0"
     ];
-    return cross1.every(cell => selectedIds.has(cell)) || cross2.every(cell => selectedIds.has(cell));
+    return cross1.every(cell => game?.selectedIds.has(cell)) || cross2.every(cell => game?.selectedIds.has(cell));
   }
 
-  // Cell ID format: b0, b1, b2, ..., o2, o3, o4
-  function getCellId(cell: ClevelandData, rowNum: number) {
-    return cell.category + rowNum.toString();
+  function makeRowKey(row_index: string) {
+    return "row_" + row_index.split("")[1];
   }
-
-  function makeCellKey(cell: ClevelandData, col: Array<ClevelandData>) {
-    const rowNum = col.findIndex(y => y.name === cell.name)
-    if (rowNum === undefined) {
-      throw new Error("Could not find cell in column");
-    }
-    return getCellId(cell, rowNum);
-  };
-
-  function makeRowKey(row: Array<ClevelandData>, board: Array<Array<ClevelandData>>) {
-    return "row_" + board.findIndex(y => y === row).toString();
-  }
-
-  const board = bingoOptions.boardValues.map(row =>
-    (
-      <View style={boardStyles.row} key={makeRowKey(row, bingoOptions.boardValues)}>
-      {row.map(cell =>
-        <Cell
-          contents={cell}
-          id={makeCellKey(cell, bingoOptions.boardMap[cell.category])}
-          selectedIds={selectedIds}
-          addSelectedId={addSelectedId}
-          gamePlay={gamePlay}
-          winningIds={winningCells}
-          key={makeCellKey(cell, bingoOptions.boardMap[cell.category])}
-        />
-        )}
-      </View>
-    )
-  );
 
   return (
     <>
       <Banner
         handleNewGame={handleNewGame}
-        gameMode={gameMode}
-        setGameMode={setGameMode}
+        handleClearGames={clearGames}
+        game={game}
+        realm={realm}
         />
-      {board}
+      <Playable
+        boardValues={game?.boardValues}
+        selectedIds={game?.selectedIds}
+        makeRowKey={makeRowKey}
+        gamePlay={game?.active}
+        winningCells={winningCells}
+        game={game}
+        realm={realm}
+      />
     </>
   )
 }
-
-export default Board;

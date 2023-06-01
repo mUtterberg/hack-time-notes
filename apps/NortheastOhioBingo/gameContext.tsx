@@ -2,69 +2,63 @@ import Realm from "realm";
 import { createRealmContext } from '@realm/react';
 
 export class ClevelandActivity extends Realm.Object<ClevelandActivity> {
-  // _id!: Realm.BSON.ObjectId;
+  _id!: Realm.BSON.ObjectId;
   displayName!: string;
   name!: string;
   category!: string;
   notes?: string;
   url?: string;
   freeSpace?: boolean;
-  tmp?: string;
   static schema = {
     name: "ClevelandActivity",
     properties: {
-      // _id: 'objectId',
+      _id: {type: 'objectId', default: new Realm.BSON.ObjectId()},
       displayName: 'string',
       name: 'string',
       category: 'string',
       notes: 'string?',
       url: 'string?',
       freeSpace: 'bool?',
-      tmp: 'string?',
     }
-  }
+  };
 };
 
-export class BoardMap extends Realm.Object<BoardMap> {
-  b!: ClevelandActivity[];
-  i!: ClevelandActivity[];
-  n!: ClevelandActivity[];
-  e!: ClevelandActivity[];
-  o!: ClevelandActivity[];
+export class StatefulActivity extends Realm.Object<StatefulActivity> {
+  activity!: ClevelandActivity;
+  position!: string;
   static schema = {
-    name: "BoardMap",
-    // embedded: true,
+    name: "StatefulActivity",
+    embedded: true,
     properties: {
-      b: {type: 'list', objectType: 'ClevelandActivity', default: []},
-      i: {type: 'list', objectType: 'ClevelandActivity', default: []},
-      n: {type: 'list', objectType: 'ClevelandActivity', default: []},
-      e: {type: 'list', objectType: 'ClevelandActivity', default: []},
-      o: {type: 'list', objectType: 'ClevelandActivity', default: []},
+      activity: 'ClevelandActivity',
+      position: {type: 'string', default: 'n2', indexed: true},
     },
   };
-}
+};
 
 export class Game extends Realm.Object<Game> {
   _id!: Realm.BSON.ObjectId;
   name!: string;
   mode!: string;
-  selectedIds!: string[];
-  boardMap!: BoardMap;
-   static schema = {
+  active!: boolean;
+  selectedIds!: Realm.Set<string>;
+  boardValues!: StatefulActivity[];
+  static schema = {
     name: "Game",
     properties: {
-      _id: "objectId",
-      name: "string",
-      mode: "string",
-      selectedIds: "string[]",
-      boardMap: "BoardMap",
+      _id: {type: "objectId", default: new Realm.BSON.ObjectId()},
+      name: {type: "string", default: "New Game"},
+      mode: {type: "string", default: "simple"},
+      active: {type: "bool", default: true},
+      selectedIds: {type: "set", objectType: "string", default: ["n2"]},
+      boardValues: {type: "list", objectType: "StatefulActivity", default: []},
     },
     primaryKey: "_id"
   };
 }
 
 const realmConfig: Realm.Configuration = {
-    schema: [BoardMap, ClevelandActivity, Game],
+    schema: [ClevelandActivity, StatefulActivity, Game],
     // DEV ONLY
     deleteRealmIfMigrationNeeded: true,
 };

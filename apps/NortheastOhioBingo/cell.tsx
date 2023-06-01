@@ -1,20 +1,17 @@
 import { Alert, Linking, Pressable, Text, TouchableHighlight, View } from 'react-native';
 import { cellStyles } from './styles';
-import { ClevelandData } from './contentTypes';
-// import { ClevelandActivity } from './gameContext';
-
-type TrackingFunction = (id: string) => void;
+import { Game, StatefulActivity } from './gameContext';
+import { addSelectedId } from './gameData';
 
 export type CellProps = {
-  contents: ClevelandData,
-  id: string,
-  selectedIds: Set<string>,
-  addSelectedId: TrackingFunction,
+  contents: StatefulActivity,
   gamePlay: boolean
   winningIds: Set<string>
+  realm: Realm,
+  game: Game
 };
 
-export default function Cell ({contents, id, selectedIds, addSelectedId, gamePlay, winningIds}: CellProps) {
+export default function Cell ({contents, gamePlay, winningIds, realm, game}: CellProps) {
 
   function getHighlightStyle() {
     // var returnStyle = cellStyles.availableTouchable;
@@ -24,36 +21,37 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
     //   returnStyle = cellStyles.selectedTouchable;
     // }
     // return returnStyle;
-    return selectedIds.has(id) ? cellStyles.selectedTouchable : cellStyles.availableTouchable;
+    return game.selectedIds.has(contents.position) ? cellStyles.selectedTouchable : cellStyles.availableTouchable;
   }
 
   function getPressableStyle() {
-    return selectedIds.has(id) ? cellStyles.selectedCell : cellStyles.availableCell;
+    return game.selectedIds.has(contents.position) ? cellStyles.selectedCell : cellStyles.availableCell;
   }
 
   function handlePress() {
     if (!gamePlay) {
       return;
     }
-    addSelectedId(id);
+    addSelectedId(realm, game, contents.position);
   }
 
   function handleMoreInfo() {
-    if (contents.url !== undefined) {
-      const url = contents.url
+    const info = contents.activity;
+    if (info.url !== undefined) {
+      const url = info.url
       Alert.alert(
-        contents.name,
-        contents.notes,
-        [{text: "Go to " + contents.url, onPress: () => Linking.openURL(url)}]
+        info.name,
+        info.notes,
+        [{text: "Go to " + info.url, onPress: () => Linking.openURL(url)}]
         );
-    } else if (contents.notes !== undefined) {
+    } else if (info.notes !== undefined) {
     Alert.alert(
-      contents.name,
-      contents.notes
+      info.name,
+      info.notes
       );
     } else {
       Alert.alert(
-        contents.name,
+        info.name,
         "No additional information (yet)"
         );
     }
@@ -61,7 +59,7 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
 
   function handleLongPress() {
     Alert.alert(
-      contents.name + "!",
+      contents.activity.name + "!",
       "Did you go?",
       [
         {text: 'Yes!', onPress: () => handlePress()},
@@ -75,7 +73,7 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
     <TouchableHighlight style={getHighlightStyle()} onPress={handlePress} onLongPress={handleLongPress}>
     <View style={getPressableStyle()}>
       <Pressable onPress={handlePress} onLongPress={handleLongPress}>
-        <Text style={cellStyles.text}>{contents.displayName}</Text>
+        <Text style={cellStyles.text}>{contents.activity.displayName}</Text>
       </Pressable>
     </View>
     </TouchableHighlight>

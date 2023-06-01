@@ -58,11 +58,11 @@ export const bannerStyles = StyleSheet.create({
 
 export const boardStyles = StyleSheet.create({
   row: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: 'black',
-    flexDirection: 'row',
-    backgroundColor: '#FBF4F4'
+  alignItems: 'center',
+  justifyContent: 'center',
+  borderColor: 'black',
+  flexDirection: 'row',
+  backgroundColor: '#FBF4F4'
   }
 });
 
