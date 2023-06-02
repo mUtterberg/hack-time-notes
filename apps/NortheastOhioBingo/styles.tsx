@@ -89,9 +89,7 @@ export const boardStyles = StyleSheet.create({
   },
   playable: {
     alignItems: 'center',
-    // justifyContent: 'center',
     borderColor: 'black',
-    // flexDirection: 'column',
     backgroundColor: '#FBF4F4',
     flex: 1,
   },
@@ -143,5 +141,21 @@ export const cellStyles = StyleSheet.create({
   },
   text: {
     color: 'white',
+  }
+});
+
+export const navigatorStyles = StyleSheet.create({
+  tableCell: {
+    flex: 1,
+  },
+  tableRow: {
+    backgroundColor: 'lightblue',
+    borderWidth: 1,
+    padding: 5,
+  },
+  tableText: {
+    // fontSize: 20,
+    // flexDirection: 'row',
+    overflow: 'scroll',
   }
 });
