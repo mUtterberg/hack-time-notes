@@ -1,48 +1,57 @@
-import { Alert, Linking, Pressable, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import { ClevelandData } from './contentTypes';
-
-type TrackingFunction = (id: string) => void;
+import { Alert, Linking, Pressable, Text, TouchableHighlight, View } from 'react-native';
+import { cellStyles } from './styles';
+import { Game, StatefulActivity } from './gameContext';
+import { addSelectedId } from './gameData';
 
 export type CellProps = {
-  contents: ClevelandData,
-  id: string,
-  selectedIds: Set<string>,
-  addSelectedId: TrackingFunction,
+  contents: StatefulActivity,
   gamePlay: boolean
+  winningIds: Set<string>
+  realm: Realm,
+  game: Game
 };
 
-export default function Cell ({contents, id, selectedIds, addSelectedId, gamePlay}: CellProps) {
+export default function Cell ({contents, gamePlay, winningIds, realm, game}: CellProps) {
 
   function getHighlightStyle() {
-    return selectedIds.has(id) ? styles.selectedTouchable : styles.availableTouchable;
+    // var returnStyle = cellStyles.availableTouchable;
+    // if (!gamePlay && winningIds.has(id)) {
+    //   returnStyle = cellStyles.winningTouchable;
+    // } else if (selectedIds.has(id)) {
+    //   returnStyle = cellStyles.selectedTouchable;
+    // }
+    // return returnStyle;
+    return game.selectedIds.has(contents.position) ? cellStyles.selectedTouchable : cellStyles.availableTouchable;
   }
 
   function getPressableStyle() {
-    return selectedIds.has(id) ? styles.selectedCell : styles.availableCell;
+    return game.selectedIds.has(contents.position) ? cellStyles.selectedCell : cellStyles.availableCell;
   }
 
   function handlePress() {
     if (!gamePlay) {
       return;
     }
-    addSelectedId(id);
+    addSelectedId(realm, game, contents.position);
   }
 
   function handleMoreInfo() {
-    if (contents.url !== undefined) {
+    const info = contents.activity;
+    if (info.url !== undefined) {
+      const url = info.url
       Alert.alert(
-        contents.name,
-        contents.notes,
-        [{text: "Go to " + contents.url, onPress: () => Linking.openURL(contents.url)}]
+        info.name,
+        info.notes,
+        [{text: "Go to " + info.url, onPress: () => Linking.openURL(url)}]
         );
-    } else if (contents.notes !== undefined) {
+    } else if (info.notes !== undefined) {
     Alert.alert(
-      contents.name,
-      contents.notes
+      info.name,
+      info.notes
       );
     } else {
       Alert.alert(
-        contents.name,
+        info.name,
         "No additional information (yet)"
         );
     }
@@ -50,7 +59,7 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
 
   function handleLongPress() {
     Alert.alert(
-      contents.name + "!",
+      contents.activity.name + "!",
       "Did you go?",
       [
         {text: 'Yes!', onPress: () => handlePress()},
@@ -64,42 +73,9 @@ export default function Cell ({contents, id, selectedIds, addSelectedId, gamePla
     <TouchableHighlight style={getHighlightStyle()} onPress={handlePress} onLongPress={handleLongPress}>
     <View style={getPressableStyle()}>
       <Pressable onPress={handlePress} onLongPress={handleLongPress}>
-        <Text>{contents.displayName}</Text>
+        <Text style={cellStyles.text}>{contents.activity.displayName}</Text>
       </Pressable>
     </View>
     </TouchableHighlight>
   );
 };
-
-const styles = StyleSheet.create({
-  availableCell: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: 40,
-    backgroundColor: 'yellow'
-  },
-  selectedCell: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: 40,
-    backgroundColor: 'green'
-  },
-  availableTouchable: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    flex: 1,
-    height: 40,
-    backgroundColor: 'yellow'
-  },
-  selectedTouchable: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    flex: 1,
-    height: 40,
-    backgroundColor: 'green'
-  },
-});

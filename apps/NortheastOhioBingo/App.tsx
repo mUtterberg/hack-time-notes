@@ -13,24 +13,42 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-import Board from './bingo';
+import { GameContext } from './gameContext';
+import Bingo from './bingo';
+
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+
+function StackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Bingo" component={Bingo} />
+    </Stack.Navigator>
+  )
+}
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? "#7E252D" : "#FBF4F4",
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
+      <GameContext.RealmProvider>
+      <NavigationContainer>
+        <StackScreen />
+      </NavigationContainer>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
-      />
+        />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
@@ -40,15 +58,18 @@ function App(): JSX.Element {
           source={{
             uri: 'https://www.onlyinyourstate.com/wp-content/uploads/2019/10/29015623688_1fc59b7c8b_k.jpg',
           }}
-        />
+          />
         </View>
+
         <View
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+            backgroundColor: isDarkMode ? "#7E252D" : Colors.white,
           }}>
-          <Board />
+          <Bingo />
         </View>
+
       </ScrollView>
+    </GameContext.RealmProvider>
     </SafeAreaView>
   );
 }
@@ -66,7 +87,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
     flex: 1,
-  },
+  }
 });
 
 export default App;

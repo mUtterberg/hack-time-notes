@@ -1,50 +1,43 @@
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, Text, View } from 'react-native';
+import { bannerStyles } from './styles';
+import { loadAllGames, setGameMode } from './gameData';
+import { Game } from './gameContext';
 
-export default function Banner({ handleNewGame, gameMode, setGameMode }: { handleNewGame: () => void, gameMode: string, setGameMode: () => void }) {
+export default function Banner({ handleNewGame, handleClearGames, game, realm }: { handleNewGame: () => void, handleClearGames: () => void, game: Game, realm: Realm }) {
   function handleLongPress() {
-    console.log("Current mode: " + gameMode);
     Alert.alert(
-      "Game Mode: " + gameMode,
+      "Game Mode: " + game?.mode,
       "Change game mode?",
       [
-        { text: 'Standard', onPress: () => setGameMode("simple") },
-        { text: 'Blackout', onPress: () => setGameMode("blackout") },
+        { text: 'Standard', onPress: () => setGameMode(realm, game, "simple") },
+        { text: 'Blackout', onPress: () => setGameMode(realm, game, "blackout") },
         { text: 'Cancel', onPress: () => {}, style: 'cancel' }
       ]
     )
-    console.log("New mode: " + gameMode);
   }
+  const buttons = (
+    <>
+    <Pressable style={bannerStyles.button} onPress={handleNewGame} onLongPress={handleLongPress}>
+      <Text style={bannerStyles.buttonText}>New Game?</Text>
+    </Pressable>
+    {/* <Pressable style={bannerStyles.button} onPress={handleClearGames} onLongPress={handleLongPress}>
+      <Text style={bannerStyles.buttonText}>Delete {loadAllGames(realm).filtered('active = $0', true).length - 1} active games?</Text>
+    </Pressable> */}
+    <Pressable style={bannerStyles.button} onPress={handleLongPress} onLongPress={handleLongPress}>
+      <Text style={bannerStyles.buttonText}>Change mode?</Text>
+      <Text style={bannerStyles.buttonText}>(Mode: {game?.mode})</Text>
+    </Pressable>
+    </>
+  )
 
   return (
-    <View style={styles.banner}>
-      <Text>Northeast Ohio Bingo</Text>
-      <View style={styles.newGame}>
-        <Pressable onPress={handleNewGame} onLongPress={handleLongPress}>
-          <Text>New Game</Text>
-        </Pressable>
+    <View style={bannerStyles.banner}>
+      <Text style={bannerStyles.title}>Northeast Ohio Bingo</Text>
+      <View style={bannerStyles.buttonRow}>
+        {buttons}
       </View>
     </View>
   )
 };
 
-const styles = StyleSheet.create({
-  banner: {
-    flex: 1,
-    backgroundColor: 'lightpink',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    margin: 10,
-  },
-  newGame: {
-    flex: 1,
-    borderWidth: 1,
-    backgroundColor: 'lightpink',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontWeight: 'bold',
-    height: 60,
-    padding: 10,
-    margin: 10,
-  }
-});
+
