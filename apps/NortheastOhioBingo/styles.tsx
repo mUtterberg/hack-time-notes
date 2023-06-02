@@ -1,5 +1,25 @@
 import { StyleSheet } from "react-native";
 
+export function getBackgroundColor(isDarkMode: boolean) {
+  return isDarkMode ? "#7E252D" : "#FBF4F4"
+}
+export const appStyles = StyleSheet.create({
+  imageContainer: {
+    minHeight: 150,
+    maxHeight: 200,
+    flex: 1,
+  },
+  highlight: {
+    fontWeight: '700',
+  },
+  banner: {
+    height: 200,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    flex: 1,
+  }
+});
+
 const commonStyling = StyleSheet.create({
   centered: {
     alignItems: 'center',
@@ -9,17 +29,20 @@ const commonStyling = StyleSheet.create({
 
 export const bannerStyles = StyleSheet.create({
   banner: {
-    flex: 1,
+    flex: 0.4,
+    flexDirection: 'column',
+    // maxHeight: 50,
     backgroundColor: '#7E252D',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 10,
-    margin: 10,
+    // margin: 10,
   },
   title: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
+    textAlign: 'center',
   },
   buttonRow: {
     flex: 1,
@@ -58,12 +81,20 @@ export const bannerStyles = StyleSheet.create({
 
 export const boardStyles = StyleSheet.create({
   row: {
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderColor: 'black',
-  flexDirection: 'row',
-  backgroundColor: '#FBF4F4'
-  }
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'black',
+    flexDirection: 'row',
+    backgroundColor: '#FBF4F4'
+  },
+  playable: {
+    alignItems: 'center',
+    // justifyContent: 'center',
+    borderColor: 'black',
+    // flexDirection: 'column',
+    backgroundColor: '#FBF4F4',
+    flex: 1,
+  },
 });
 
 export const cellStyles = StyleSheet.create({

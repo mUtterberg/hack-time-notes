@@ -52,7 +52,7 @@ export default function Playable(
   }
 
   return (
-    <View>
+    <View style={boardStyles.playable}>
       {getBoard()}
     </View>
   );

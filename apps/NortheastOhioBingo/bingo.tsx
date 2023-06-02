@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Alert, useColorScheme } from 'react-native';
+import { Alert, ScrollView, useColorScheme } from 'react-native';
 import { GameContext, Game } from './gameContext';
+import { getBackgroundColor } from './styles';
 import Banner from './banner';
+import ImageButton from './imageButton';
 import { createGame, setGamePlay } from './gameData';
 import Playable from './playable';
+import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/typescript/src/types';
 
 function getSavedGameIfAny(realm: Realm) {
   const savedGames = realm.objects<Game>('Game');
@@ -26,7 +29,7 @@ function getSavedGameIfAny(realm: Realm) {
   };
 }
 
-export default function Bingo({}) {
+export default function Bingo({ navigation }: { navigation: NativeStackNavigatorProps }) {
   const realm = GameContext.useRealm();
   const [gameId, setGameId] = useState(getSavedGameIfAny(realm)._id);
   const game = GameContext.useObject(Game, gameId);
@@ -142,23 +145,36 @@ export default function Bingo({}) {
     return "row_" + row_index.split("")[1];
   }
 
+  const backgroundStyle = {
+    backgroundColor: getBackgroundColor(isDarkMode),
+  };
+
   return (
     <>
-      <Banner
-        handleNewGame={handleNewGame}
-        handleClearGames={clearGames}
-        game={game}
-        realm={realm}
-        />
-      <Playable
-        boardValues={game?.boardValues}
-        selectedIds={game?.selectedIds}
-        makeRowKey={makeRowKey}
-        gamePlay={game?.active}
-        winningCells={winningCells}
-        game={game}
-        realm={realm}
+    <ImageButton
+      navigation={navigation}
+    />
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      style={backgroundStyle}
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
+    <Banner
+      handleNewGame={handleNewGame}
+      handleClearGames={clearGames}
+      game={game}
+      realm={realm}
       />
+    <Playable
+      boardValues={game?.boardValues}
+      selectedIds={game?.selectedIds}
+      makeRowKey={makeRowKey}
+      gamePlay={game?.active}
+      winningCells={winningCells}
+      game={game}
+      realm={realm}
+      />
+    </ScrollView>
     </>
   )
 }
