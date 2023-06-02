@@ -1,10 +1,15 @@
-import { Image, Touchable, TouchableOpacity, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { appStyles } from './styles';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
-export default function ImageButton({ navigation }: { navigation: any }) {
+export default function ImageButton() {
+  const navigation = useNavigation();
+  const routes = useNavigationState(state => state.routeNames);
+  const currentRoute = useNavigationState(state => state.routeNames[state.index]);
+  const toggleRoute = routes.filter(route => route !== currentRoute)[0];
   return (
     <>
-    <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={appStyles.imageContainer}>
+    <TouchableOpacity onPress={() => navigation.navigate(toggleRoute)} style={appStyles.imageContainer}>
     <View style={appStyles.imageContainer}>
       <Image
         style={appStyles.banner}

@@ -24,7 +24,7 @@ function StackScreen() {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name="Bingo" component={Bingo} />
-      <Stack.Screen name="Settings" component={GameNavigator} />
+      <Stack.Screen name="Games" component={GameNavigator} />
     </Stack.Navigator>
   )
 }

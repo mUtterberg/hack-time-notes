@@ -151,9 +151,7 @@ export default function Bingo({ navigation }: { navigation: NativeStackNavigator
 
   return (
     <>
-    <ImageButton
-      navigation={navigation}
-    />
+    <ImageButton />
     <ScrollView
       contentInsetAdjustmentBehavior="automatic"
       style={backgroundStyle}
