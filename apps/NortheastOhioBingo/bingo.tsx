@@ -7,15 +7,20 @@ import Playable from './playable';
 
 function getSavedGameIfAny(realm: Realm) {
   const savedGames = realm.objects<Game>('Game');
-  console.log("Found "+savedGames.length+" saved games")
-  if (savedGames.filtered('active = $0', true).length === 0) {
-    const newGame = createGame(realm);
-    console.log(newGame)
-    console.log("Created new game with id "+newGame._id)
-    return newGame;
+  console.log(
+    "Found "+savedGames.length+" saved games ("
+    +savedGames.filtered('active = $0', true).length+" active & "
+    +savedGames.filtered('active = $0', false).length+" inactive)"
+  )
+  if (savedGames.length === 0) {
+    console.log("No saved games found. Creating new game.")
+    return createGame(realm);
+  } else if (savedGames.filtered('active = $0', true).length === 0) {
+    console.log("No active games found. Loading last inactive game.")
+    const inactiveGames = savedGames.filtered('active = $0', false);
+    return inactiveGames[inactiveGames.length - 1];
   } else {
-    console.log("Loading last of "+savedGames.filtered('active = $0', true).length+" active games")
-    console.log(savedGames.filtered('active = $0', false).length+" inactive games")
+    console.log("Loading last active game.")
     const activeGames = savedGames.filtered('active = $0', true);
     return activeGames[activeGames.length - 1];
   };
@@ -78,7 +83,7 @@ export default function Bingo({}) {
   });
   // END OF RUNS AFTER EVERY RENDER
 
-  function selectNewCards() {
+  function handleNewGame() {
     setGamePlay(
       realm,
       game,
@@ -88,11 +93,7 @@ export default function Bingo({}) {
     setGameId(newGame._id);
   }
 
-  function handleNewGame() {
-    selectNewCards();
-    setGamePlay(realm, game, true);
-  }
-
+  // Currently unused due to bug in my implementation
   function clearGames() {
     realm.write(() => {
       const games = realm.objects<Game>('Game').filtered('_id != $0', gameId);

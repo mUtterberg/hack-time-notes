@@ -106,6 +106,7 @@ export function setGamePlay(
   game: Game,
   gamePlay: boolean = true,
 ) {
+  console.log("Setting game.active for \""+game._id+"\" to "+gamePlay)
   realm.write(() => {
     game.active = gamePlay;
   });
