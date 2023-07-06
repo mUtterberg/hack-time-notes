@@ -6,6 +6,7 @@
 import React from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getBackgroundColor } from './styles';
 
@@ -13,21 +14,7 @@ import { GameContext } from './gameContext';
 import Bingo from './bingo';
 import GameNavigator from './gameNavigator';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator();
-
-function StackScreen() {
-  return (
-    <Stack.Navigator
-      initialRouteName='Bingo'
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="Bingo" component={Bingo} />
-      <Stack.Screen name="Games" component={GameNavigator} />
-    </Stack.Navigator>
-  )
-}
+const Tab = createBottomTabNavigator();
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -40,7 +27,10 @@ function App(): JSX.Element {
         backgroundColor={getBackgroundColor(isDarkMode)}
         />
       <NavigationContainer>
-        <StackScreen />
+        <Tab.Navigator>
+          <Tab.Screen name="Bingo" component={Bingo} />
+          <Tab.Screen name="Games" component={GameNavigator} />
+        </Tab.Navigator>
       </NavigationContainer>
     </GameContext.RealmProvider>
     </SafeAreaProvider>
