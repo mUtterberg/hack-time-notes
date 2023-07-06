@@ -4,10 +4,9 @@
  */
 
 import React from 'react';
-import { StatusBar, useColorScheme } from 'react-native';
+import { SafeAreaView, StatusBar, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getBackgroundColor } from './styles';
 
 import { GameContext } from './gameContext';
@@ -20,20 +19,33 @@ function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaView style={{
+      flex: 1,
+      backgroundColor: getBackgroundColor(isDarkMode)
+      }}>
       <GameContext.RealmProvider>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={getBackgroundColor(isDarkMode)}
         />
       <NavigationContainer>
-        <Tab.Navigator>
+        <Tab.Navigator
+          initialRouteName="Bingo"
+          screenOptions={{
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+            headerStyle: {
+              backgroundColor: 'papayawhip',
+              height: 30,
+            }
+          }}
+        >
           <Tab.Screen name="Bingo" component={Bingo} />
           <Tab.Screen name="Games" component={GameNavigator} />
         </Tab.Navigator>
       </NavigationContainer>
-    </GameContext.RealmProvider>
-    </SafeAreaProvider>
+      </GameContext.RealmProvider>
+    </SafeAreaView>
   );
 }
 
