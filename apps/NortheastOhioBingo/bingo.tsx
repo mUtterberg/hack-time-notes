@@ -4,7 +4,7 @@ import { GameContext, Game } from './gameContext';
 import { getBackgroundColor } from './styles';
 import Banner from './banner';
 import ImageButton from './imageButton';
-import { createGame, setGamePlay } from './gameData';
+import { createGame, setGamePlay, setResolution, setWinningIds } from './gameData';
 import Playable from './playable';
 import { NativeStackNavigatorProps } from '@react-navigation/native-stack/lib/typescript/src/types';
 
@@ -34,10 +34,11 @@ export default function Bingo({ navigation }: { navigation: NativeStackNavigator
   const [gameId, setGameId] = useState(getSavedGameIfAny(realm)._id);
   const game = GameContext.useObject(Game, gameId);
   const isDarkMode = useColorScheme() === 'dark';
-  const [winningCells, setWinningCells] = useState(new Set<string>)
 
-  function handleBingo(mode: string) {
+  function handleBingo(mode: string, winningIds: Array<string>) {
     console.log("Bingo win type: " + mode);
+    setResolution(realm, game, mode);
+    console.log("Winning ids: " + winningIds);
     setGamePlay(realm, game, false)
     Alert.alert(
       "BINGO",
@@ -60,27 +61,25 @@ export default function Bingo({ navigation }: { navigation: NativeStackNavigator
       // Check for row bingo
       [0, 1, 2, 3, 4].map((row, _) => {
         if (isRowBingo(row)) {
-          // TODO: How to safely set winning cells?
-          // setWinningCells(
-          //   new Set(['b0', 'i0', 'n0'])
-          // )
-          handleBingo("Row");
+          const rowIds = ['b'+row, 'i'+row, 'n'+row, 'g'+row, 'o'+row];
+          handleBingo("Row", rowIds);
         }
       });
 
       // Check for column bingo
       ['b', 'i', 'n', 'e', 'o'].map((column, _) => {
         if (isColumnBingo(column)) {
-          handleBingo("Column");
+          const colIds = [column+'0', column+'1', column+'2', column+'3', column+'4']
+          handleBingo("Column", colIds);
         }
       });
 
       if (isCrossBingo()) {
-        handleBingo("Cross");
+        handleBingo("Cross", whichCross());
       }
     } else if (game?.mode === "blackout") {
       if (isBlackout()) {
-        handleBingo("Blackout");
+        handleBingo("Blackout", game.selectedIds);
       }
     }
   });
@@ -140,6 +139,21 @@ export default function Bingo({ navigation }: { navigation: NativeStackNavigator
     ];
     return cross1.every(cell => game?.selectedIds.has(cell)) || cross2.every(cell => game?.selectedIds.has(cell));
   }
+  
+  function whichCross() {
+    const cross1 = [
+      "b0", "i1", "n2", "e3", "o4"
+    ];
+    const cross2 = [
+      "b4", "i3", "n2", "e1", "o0"
+    ];
+    if (cross1.every(cell => game?.selectedIds.has(cell))) {
+      return cross1;
+    } else if (cross2.every(cell => game?.selectedIds.has(cell))) {
+      return cross2;
+    }
+    return [];
+  }
 
   function makeRowKey(row_index: string) {
     return "row_" + row_index.split("")[1];
@@ -168,7 +182,7 @@ export default function Bingo({ navigation }: { navigation: NativeStackNavigator
       selectedIds={game?.selectedIds}
       makeRowKey={makeRowKey}
       gamePlay={game?.active}
-      winningCells={winningCells}
+      winningCells={game?.winningIds}
       game={game}
       realm={realm}
       />

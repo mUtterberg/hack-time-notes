@@ -18,6 +18,7 @@ function deleteArchivedGame(realm: Realm, item: Game) {
 
 function TableRow({ item, realm }: { item: Game, realm: Realm }) {
   const navigation = useNavigation();
+  const rowStyle = item.resolution ? navigatorStyles.winningRow : navigatorStyles.activeRow;
 
 
   function handlePress() {
@@ -39,17 +40,31 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
 
   return (
     <TouchableHighlight onPress={ () => console.log("Selected game from archive: "+item._id.toHexString())}>
-    <View style={navigatorStyles.tableRow}>
+    <View style={rowStyle}>
       <Pressable onPress={handlePress}>
       <View style={navigatorStyles.tableCell}>
-        <Text style={navigatorStyles.tableText}>{item._id.toHexString()}</Text>
+        <Text style={navigatorStyles.tableText}>ID: {item._id.toHexString()}</Text>
       </View>
       <View style={navigatorStyles.tableCell}>
-        <Text style={navigatorStyles.tableText}>{item.mode}</Text>
+        <Text style={navigatorStyles.tableText}>Mode: {item.mode}</Text>
       </View>
       <View style={navigatorStyles.tableCell}>
         <Text style={navigatorStyles.tableText}>{item.active ? "Active" : "Inactive"}</Text>
       </View>
+      {item.resolution ? (
+        <>
+        <View style={navigatorStyles.tableCell}>
+          <Text style={navigatorStyles.tableText}>Resolution: {item.resolution} win</Text>
+        </View>
+        </>
+      ) : null}
+      {item.winningIds ? (
+        <>
+        <View style={navigatorStyles.tableCell}>
+          <Text style={navigatorStyles.tableText}>Winning IDs: {item.winningIds}</Text>
+        </View>
+        </>
+      ) : null}
       <View style={navigatorStyles.tableCell}>
         <Text style={navigatorStyles.tableText}>Selected: {item.selectedIds.join(",")}</Text>
       </View>
@@ -62,7 +77,7 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
 
 function GameList() {
   const realm = GameContext.useRealm();
-  const games = GameContext.useQuery(Game);
+  const games = GameContext.useQuery(Game).sorted('_id', true);
   console.log("Found "+games.length+" game(s) in navigator")
   return (
     <>
