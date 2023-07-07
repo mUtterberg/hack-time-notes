@@ -12,6 +12,7 @@ import { getBackgroundColor } from './styles';
 import { GameContext } from './gameContext';
 import Bingo from './bingo';
 import GameNavigator from './gameNavigator';
+import ActivityNavigator from './activityNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,6 +43,7 @@ function App(): JSX.Element {
         >
           <Tab.Screen name="Bingo" component={Bingo} />
           <Tab.Screen name="Games" component={GameNavigator} />
+          <Tab.Screen name="Activities" component={ActivityNavigator} />
         </Tab.Navigator>
       </NavigationContainer>
       </GameContext.RealmProvider>

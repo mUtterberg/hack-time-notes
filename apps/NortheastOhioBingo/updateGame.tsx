@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Button, Text, TextInput, View } from 'react-native'
 import { Game, GameContext } from './gameContext';
 import { BSON } from 'realm';
@@ -14,14 +15,32 @@ function readGame(itemId: string) {
 
 export default function UpdateGame(params: {itemId: string}) {
   console.log(params)
+  const [name, setName] = useState('');
+  const [mode, setMode] = useState('');
   const itemId = params.route.params.itemId;
-  console.log("itemId: "+itemId)
+  const game = readGame(itemId);
   return (
     <>
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }} >
       {
-        itemId ? (
-          <Text>Updating Game {readGame(itemId)._id?.toHexString()}</Text>
+        game ? (
+          <>
+          <Text>Updating Game {game._id?.toHexString()}</Text>
+          <Text>Name:</Text>
+          <TextInput
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+            placeholder={"Name: "+game.name}
+            defaultValue={game.name}
+            onChangeText={text => setName(text)}
+          />
+          <Text>Mode:</Text>
+          <TextInput
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+            placeholder={"Mode: "+game.mode}
+            defaultValue={game.mode}
+            onChangeText={text => setMode(text)}
+          />
+          </>
         ) : <Text>Failed to load game</Text>
       }
       <Button title="Save changes" onPress={() => {}} />
