@@ -54,7 +54,7 @@ function TableRow({ item, realm }: { item: ClevelandActivity, realm: Realm }) {
 
 function ActivityList() {
   const realm = GameContext.useRealm();
-  const activities = GameContext.useQuery(ClevelandActivity).sorted('_id');
+  const activities = GameContext.useQuery(ClevelandActivity);
   console.log("Found "+activities.length+" activity(activities) in navigator")
   return (
     <>
