@@ -1,13 +1,35 @@
-import { FlatList, Pressable, Text, TouchableHighlight, View } from "react-native";
+import { Alert, FlatList, Pressable, Text, TouchableHighlight, View } from "react-native";
 import { Game, GameContext } from "./gameContext";
 import ImageButton from "./imageButton";
 import { navigatorStyles } from "./styles";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import UpdateGame from "./updateGame";
 
 
-function TableRow({ item }: { item: Game }) {
+const GameStack = createNativeStackNavigator();
+
+
+function deleteArchivedGame(realm: Realm, item: Game) {
+  realm.write(() => {
+    realm.delete(item);
+  });
+}
+
+function TableRow({ item, realm }: { item: Game, realm: Realm }) {
+  const navigation = useNavigation();
+
 
   function handlePress() {
-    console.log("Selected game from archive: "+item._id.toHexString())
+    Alert.alert(
+      "Game: " + item._id.toHexString(),
+      "Update game?",
+      [
+        { text: 'Update', onPress: () => {navigation.navigate('Update Game')} },
+        { text: 'Delete', onPress: () => {deleteArchivedGame(realm, item)} },
+        { text: 'Cancel', onPress: () => {}, style: 'cancel' }
+      ]
+    )
   }
 
   return (
@@ -32,7 +54,9 @@ function TableRow({ item }: { item: Game }) {
   )
 }
 
-export default function GameNavigator() {
+
+function GameList() {
+  const realm = GameContext.useRealm();
   const games = GameContext.useQuery(Game);
   console.log("Found "+games.length+" game(s) in navigator")
   return (
@@ -44,10 +68,20 @@ export default function GameNavigator() {
         data={games}
         keyExtractor={item => item._id.toHexString()}
         renderItem={({ item }) => (
-          <TableRow item={item} />
+          <TableRow item={item} realm={realm} />
         )}
       />
     </View>
     </>
+  )
+}
+
+
+export default function GameNavigator() {
+  return (
+    <GameStack.Navigator>
+      <GameStack.Screen name="All Games" component={GameList} />
+      <GameStack.Screen name="Update Game" component={UpdateGame} />
+    </GameStack.Navigator>
   )
 };
