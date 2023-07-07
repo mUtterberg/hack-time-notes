@@ -58,7 +58,7 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
         </View>
         </>
       ) : null}
-      {item.winningIds ? (
+      {(item.winningIds?.length > 0) ? (
         <>
         <View style={navigatorStyles.tableCell}>
           <Text style={navigatorStyles.tableText}>Winning IDs: {item.winningIds}</Text>

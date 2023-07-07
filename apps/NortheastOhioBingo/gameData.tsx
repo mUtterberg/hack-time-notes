@@ -154,7 +154,7 @@ export function setResolution(
 export function setWinningIds(
   realm: Realm,
   game: Game,
-  winningIds: Realm.Set<string>,
+  winningIds: Set<string>,
 ) {
   realm.write(() => {
     game.winningIds = winningIds;

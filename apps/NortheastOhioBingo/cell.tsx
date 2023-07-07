@@ -14,14 +14,13 @@ export type CellProps = {
 export default function Cell ({contents, gamePlay, winningIds, realm, game}: CellProps) {
 
   function getHighlightStyle() {
-    // var returnStyle = cellStyles.availableTouchable;
-    // if (!gamePlay && winningIds.has(id)) {
-    //   returnStyle = cellStyles.winningTouchable;
-    // } else if (selectedIds.has(id)) {
-    //   returnStyle = cellStyles.selectedTouchable;
-    // }
-    // return returnStyle;
-    return game.selectedIds.has(contents.position) ? cellStyles.selectedTouchable : cellStyles.availableTouchable;
+    var returnStyle = cellStyles.availableTouchable;
+    if (!gamePlay && winningIds.has(contents.position)) {
+      returnStyle = cellStyles.winningTouchable;
+    } else if (game.selectedIds.has(contents.position)) {
+      returnStyle = cellStyles.selectedTouchable;
+    }
+    return returnStyle;
   }
 
   function getPressableStyle() {

@@ -38,7 +38,7 @@ export default function Bingo({ navigation }: { navigation: NativeStackNavigator
   function handleBingo(mode: string, winningIds: Array<string>) {
     console.log("Bingo win type: " + mode);
     setResolution(realm, game, mode);
-    console.log("Winning ids: " + winningIds);
+    setWinningIds(realm, game, winningIds);
     setGamePlay(realm, game, false)
     Alert.alert(
       "BINGO",
@@ -61,7 +61,7 @@ export default function Bingo({ navigation }: { navigation: NativeStackNavigator
       // Check for row bingo
       [0, 1, 2, 3, 4].map((row, _) => {
         if (isRowBingo(row)) {
-          const rowIds = ['b'+row, 'i'+row, 'n'+row, 'g'+row, 'o'+row];
+          const rowIds = ['b'+row, 'i'+row, 'n'+row, 'e'+row, 'o'+row];
           handleBingo("Row", rowIds);
         }
       });
