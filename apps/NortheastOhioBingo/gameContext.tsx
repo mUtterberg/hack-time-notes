@@ -19,7 +19,8 @@ export class ClevelandActivity extends Realm.Object<ClevelandActivity> {
       notes: 'string?',
       url: 'string?',
       freeSpace: 'bool?',
-    }
+    },
+    primaryKey: "_id"
   };
 };
 
