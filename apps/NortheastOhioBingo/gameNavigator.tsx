@@ -58,15 +58,15 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
         </View>
         </>
       ) : null}
-      {(item.winningIds?.length > 0) ? (
+      {item.winningIds ? (
         <>
         <View style={navigatorStyles.tableCell}>
-          <Text style={navigatorStyles.tableText}>Winning IDs: {item.winningIds}</Text>
+          <Text style={navigatorStyles.tableText}>Winning IDs: {item.winningIds.join(", ")}</Text>
         </View>
         </>
       ) : null}
       <View style={navigatorStyles.tableCell}>
-        <Text style={navigatorStyles.tableText}>Selected: {item.selectedIds.join(",")}</Text>
+        <Text style={navigatorStyles.tableText}>Selected: {item.selectedIds.join(", ")}</Text>
       </View>
       </Pressable>
     </View>

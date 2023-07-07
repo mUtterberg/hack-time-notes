@@ -155,6 +155,8 @@ export const navigatorStyles = StyleSheet.create({
   },
   activeRow: {
     backgroundColor: 'limegreen',
+    borderWidth: 1,
+    padding: 5,
   },
   tableRow: {
     backgroundColor: 'lightblue',
