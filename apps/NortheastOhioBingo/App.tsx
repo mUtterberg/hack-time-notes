@@ -4,90 +4,51 @@
  */
 
 import React from 'react';
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, StatusBar, useColorScheme } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getBackgroundColor } from './styles';
 
 import { GameContext } from './gameContext';
 import Bingo from './bingo';
+import GameNavigator from './gameNavigator';
+import ActivityNavigator from './activityNavigator';
 
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-const Stack = createNativeStackNavigator();
-
-function StackScreen() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Bingo" component={Bingo} />
-    </Stack.Navigator>
-  )
-}
+const Tab = createBottomTabNavigator();
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? "#7E252D" : "#FBF4F4",
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <SafeAreaView style={{
+      flex: 1,
+      backgroundColor: getBackgroundColor(isDarkMode)
+      }}>
       <GameContext.RealmProvider>
-      <NavigationContainer>
-        <StackScreen />
-      </NavigationContainer>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        backgroundColor={getBackgroundColor(isDarkMode)}
         />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View style={styles.sectionContainer}>
-        <Image
-          style={styles.banner}
-          source={{
-            uri: 'https://www.onlyinyourstate.com/wp-content/uploads/2019/10/29015623688_1fc59b7c8b_k.jpg',
+      <NavigationContainer>
+        <Tab.Navigator
+          initialRouteName="Bingo"
+          screenOptions={{
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+            headerStyle: {
+              backgroundColor: 'papayawhip',
+              height: 30,
+            }
           }}
-          />
-        </View>
-
-        <View
-          style={{
-            backgroundColor: isDarkMode ? "#7E252D" : Colors.white,
-          }}>
-          <Bingo />
-        </View>
-
-      </ScrollView>
-    </GameContext.RealmProvider>
+        >
+          <Tab.Screen name="Bingo" component={Bingo} />
+          <Tab.Screen name="Games" component={GameNavigator} />
+          <Tab.Screen name="Activities" component={ActivityNavigator} />
+        </Tab.Navigator>
+      </NavigationContainer>
+      </GameContext.RealmProvider>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  banner: {
-    height: 200,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-    flex: 1,
-  }
-});
 
 export default App;

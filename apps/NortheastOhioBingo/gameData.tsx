@@ -1,6 +1,6 @@
 import Realm from "realm";
 import _clevelandData from "./cleveland.json";
-import { ClevelandActivity, Game, StatefulActivity } from "./gameContext";
+import { ClevelandActivity, Game, GameContext, StatefulActivity } from "./gameContext";
 export const clevelandData = _clevelandData as ClevelandActivity[];
 
 function getRandomSubarray(arr: Array<any>) {
@@ -35,6 +35,7 @@ function mapActivitiesToStatefulArray(activities: ClevelandActivity[], category:
 }
 
 export function createGame(realm: Realm) {
+  populateActivities(realm);
   const game = realm.write(() => {
     const game = realm.create<Game>(
       'Game',
@@ -53,19 +54,47 @@ export function createGame(realm: Realm) {
   return game;
 };
 
+function populateActivities(realm: Realm) {
+  const activities = realm.objects<ClevelandActivity>('ClevelandActivity');
+  realm.write(() => {
+    clevelandData.forEach(activity => {
+      const existing = activities.filtered('name = $0', activity.name).length;
+      if (existing > 0) {
+        console.log("Skipping activity "+activity.name+" auto-load ("+existing+" record(s) found in realm)")
+      } else {
+      realm.create<ClevelandActivity>(
+        'ClevelandActivity',
+        {
+          _id: new Realm.BSON.ObjectId(),
+          displayName: activity.displayName,
+          name: activity.name,
+          category: activity.category,
+          notes: activity.notes,
+          url: activity.url,
+          freeSpace: activity.freeSpace,
+        },
+        Realm.UpdateMode.Modified
+        );
+      }
+    });
+  });
+}
+
 function createBoard(realm: Realm) {
   // const categories = ["b", "i", "n", "e", "o"];
   const activityArr = new Array<ClevelandActivity>();
   var activitySample = {
     b: activityArr, i: activityArr, n: activityArr, e: activityArr, o: activityArr
   }
-  validateCategories(clevelandData.map( i => i.category), Object.keys(activitySample));
+
+  const clevelandActivities = realm.objects<ClevelandActivity>('ClevelandActivity');
+  validateCategories(clevelandActivities.map( i => i.category), Object.keys(activitySample));
   for (var [key, values] of Object.entries(activitySample)) {
-    activitySample[key] = getRandomSubarray(clevelandData.filter(i => i.category === key && i.freeSpace !== true));
+    activitySample[key] = getRandomSubarray(clevelandActivities.filter(i => i.category === key && i.freeSpace !== true));
   }
 
   // Set free space
-  const freeSpace = clevelandData.find( i => i.freeSpace === true)
+  const freeSpace = clevelandActivities.find( i => i.freeSpace === true)
   if (freeSpace === undefined) {
     throw new Error("Could not find free space");
   }
