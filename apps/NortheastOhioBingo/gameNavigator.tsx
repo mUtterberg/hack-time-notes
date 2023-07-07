@@ -25,7 +25,12 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
       "Game: " + item._id.toHexString(),
       "Update game?",
       [
-        { text: 'Update', onPress: () => {navigation.navigate('Update Game')} },
+        {
+          text: 'Update',
+          onPress: () => {
+            navigation.navigate('Update Game', {itemId: item._id.toHexString()})
+          }
+        },
         { text: 'Delete', onPress: () => {deleteArchivedGame(realm, item)} },
         { text: 'Cancel', onPress: () => {}, style: 'cancel' }
       ]
