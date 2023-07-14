@@ -19,7 +19,6 @@ export default function Playable(
     return (
       <Cell
         contents={cell}
-        selectedIds={selectedIds}
         gamePlay={gamePlay}
         winningIds={winningCells}
         key={cell.position}

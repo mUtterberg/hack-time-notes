@@ -4,7 +4,7 @@ import ImageButton from "./imageButton";
 import { navigatorStyles } from "./styles";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
-// import UpdateGame from "./updateGame";
+import UpdateActivity from "./updateActivity";
 
 
 const ActivityStack = createNativeStackNavigator();
@@ -78,7 +78,7 @@ export default function ActivityNavigator() {
   return (
     <ActivityStack.Navigator>
       <ActivityStack.Screen name="All Activities" component={ActivityList} />
-      {/* <ActivityStack.Screen name="Update Game" component={UpdateGame} /> */}
+      <ActivityStack.Screen name="Update Activity" component={UpdateActivity} />
     </ActivityStack.Navigator>
   )
 };

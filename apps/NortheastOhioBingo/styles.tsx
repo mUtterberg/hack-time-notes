@@ -148,6 +148,16 @@ export const navigatorStyles = StyleSheet.create({
   tableCell: {
     flex: 1,
   },
+  winningRow: {
+    backgroundColor: 'lightgreen',
+    borderWidth: 1,
+    padding: 5,
+  },
+  activeRow: {
+    backgroundColor: 'limegreen',
+    borderWidth: 1,
+    padding: 5,
+  },
   tableRow: {
     backgroundColor: 'lightblue',
     borderWidth: 1,

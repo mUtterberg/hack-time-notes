@@ -19,7 +19,8 @@ export class ClevelandActivity extends Realm.Object<ClevelandActivity> {
       notes: 'string?',
       url: 'string?',
       freeSpace: 'bool?',
-    }
+    },
+    primaryKey: "_id"
   };
 };
 
@@ -42,6 +43,8 @@ export class Game extends Realm.Object<Game> {
   mode!: string;
   active!: boolean;
   selectedIds!: Realm.Set<string>;
+  winningIds?: Realm.Set<string>;
+  resolution?: string;
   boardValues!: StatefulActivity[];
   static schema = {
     name: "Game",
@@ -51,6 +54,8 @@ export class Game extends Realm.Object<Game> {
       mode: {type: "string", default: "simple"},
       active: {type: "bool", default: true},
       selectedIds: {type: "set", objectType: "string", default: ["n2"]},
+      winningIds: {type: "set?", objectType: "string"},
+      resolution: "string?",
       boardValues: {type: "list", objectType: "StatefulActivity", default: []},
     },
     primaryKey: "_id"

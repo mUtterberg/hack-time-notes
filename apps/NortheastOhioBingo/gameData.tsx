@@ -59,21 +59,21 @@ function populateActivities(realm: Realm) {
   realm.write(() => {
     clevelandData.forEach(activity => {
       const existing = activities.filtered('name = $0', activity.name).length;
-      if (existing > 0) {
-        console.log("Skipping activity "+activity.name+" auto-load ("+existing+" record(s) found in realm)")
-      } else {
-      realm.create<ClevelandActivity>(
-        'ClevelandActivity',
-        {
-          _id: new Realm.BSON.ObjectId(),
-          displayName: activity.displayName,
-          name: activity.name,
-          category: activity.category,
-          notes: activity.notes,
-          url: activity.url,
-          freeSpace: activity.freeSpace,
-        },
-        Realm.UpdateMode.Modified
+      if (existing > 1) {
+        throw new Error("Found "+existing+" records for activity "+activity.name);
+      } else if (existing === 0) {
+        realm.create<ClevelandActivity>(
+          'ClevelandActivity',
+          {
+            _id: new Realm.BSON.ObjectId(),
+            displayName: activity.displayName,
+            name: activity.name,
+            category: activity.category,
+            notes: activity.notes,
+            url: activity.url,
+            freeSpace: activity.freeSpace,
+          },
+          Realm.UpdateMode.Modified
         );
       }
     });
@@ -138,6 +138,26 @@ export function setGamePlay(
   console.log("Setting game.active for \""+game._id+"\" to "+gamePlay)
   realm.write(() => {
     game.active = gamePlay;
+  });
+}
+
+export function setResolution(
+  realm: Realm,
+  game: Game,
+  resolution: string,
+) {
+  realm.write(() => {
+    game.resolution = resolution;
+  });
+}
+
+export function setWinningIds(
+  realm: Realm,
+  game: Game,
+  winningIds: Set<string>,
+) {
+  realm.write(() => {
+    game.winningIds = winningIds;
   });
 }
 
