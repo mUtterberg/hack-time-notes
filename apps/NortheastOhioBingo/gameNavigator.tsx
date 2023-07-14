@@ -1,3 +1,4 @@
+import { MutableRefObject, createRef, useRef, useState } from "react";
 import { Alert, FlatList, Pressable, Text, TouchableHighlight, View } from "react-native";
 import { Game, GameContext } from "./gameContext";
 import ImageButton from "./imageButton";
@@ -5,7 +6,6 @@ import { navigatorStyles } from "./styles";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
 import UpdateGame from "./updateGame";
-
 
 const GameStack = createNativeStackNavigator();
 
@@ -22,10 +22,11 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
 
 
   function handlePress() {
-    Alert.alert(
-      "Game: " + item._id.toHexString(),
-      "Update game?",
-      [
+    var message: string;
+    var options: {text: string, onPress: () => void, style?: "cancel" | "default" | "destructive"}[];
+    if (item.active?.valueOf() === true) {
+      message = "Update game?"
+      options = [
         {
           text: 'Update',
           onPress: () => {
@@ -35,6 +36,17 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
         { text: 'Delete', onPress: () => {deleteArchivedGame(realm, item)} },
         { text: 'Cancel', onPress: () => {}, style: 'cancel' }
       ]
+    } else {
+      message = "Delete game?"
+      options = [
+        { text: 'Delete', onPress: () => {deleteArchivedGame(realm, item)} },
+        { text: 'Cancel', onPress: () => {}, style: 'cancel' }
+      ]
+    }
+    Alert.alert(
+      "Game: " + item._id.toHexString(),
+      message,
+      options
     )
   }
 
@@ -77,13 +89,18 @@ function TableRow({ item, realm }: { item: Game, realm: Realm }) {
 
 function GameList() {
   const realm = GameContext.useRealm();
-  const games = GameContext.useQuery(Game).sorted('_id', true);
+  const games = GameContext.useQuery(Game);
   console.log("Found "+games.length+" game(s) in navigator")
+
+  const [filterFieldDisplay, setFilterFieldDisplay] = useState("All");
+
   return (
     <>
     <View style={{ flex: 1 }}>
       <ImageButton />
-      <Text>Data Navigator: All games ({games.length})</Text>
+        <Text style={{width: "50%"}}>
+          Data Navigator: {filterFieldDisplay} games ({games.length})
+        </Text>
       <FlatList
         data={games}
         keyExtractor={item => item._id.toHexString()}
@@ -100,7 +117,7 @@ function GameList() {
 export default function GameNavigator() {
   return (
     <GameStack.Navigator>
-      <GameStack.Screen name="All Games" component={GameList} />
+      <GameStack.Screen name="Game Navigator" component={GameList} />
       <GameStack.Screen name="Update Game" component={UpdateGame} />
     </GameStack.Navigator>
   )
