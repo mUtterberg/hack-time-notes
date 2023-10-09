@@ -7,8 +7,6 @@ fn main() {
 
     let secret_number = rand::thread_rng().gen_range(1..=100);
 
-    println!("The secret number is: {secret_number}");
-
     loop {
         
         
@@ -24,7 +22,12 @@ fn main() {
         // so we can use expect. 
         .expect("Failed to read line");
     
-        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        // We switch from an expect call to a match expression
+        // to move from crashing on an error to handling the error. 
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => continue,
+        };
         
         println!("You guessed: {guess}");
         
