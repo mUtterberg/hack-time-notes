@@ -7,10 +7,10 @@ Rustaceans. Cute!
 ```rust
 cargo new <name>
 // Within initialized Cargo project
-cargo check
-// rustc <filename> can only build a program with no dependencies
-// cargo build
-cargo run
+cargo check // See if program will compile (without actually compiling)
+// "rustc <filename>" can only build a program with no dependencies
+// "cargo build" is useful as a standalone step after adding a dependency
+cargo run // Compile & run
 ```
 
 ## Notes
