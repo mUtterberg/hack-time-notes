@@ -21,4 +21,14 @@
 > and when you provide an incorrect index, invalid memory can be accessed.
 > Rust protects you against this kind of error by immediately exiting instead of allowing the memory access and continuing.
 
-:exploding-head:
+```rust
+% rustc main.rs
+% ./main
+Please enter an array index.
+6
+thread 'main' panicked at src/main.rs:19:19:
+index out of bounds: the len is 5 but the index is 6
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+```
+
+:exploding_head:
