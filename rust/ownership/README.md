@@ -50,4 +50,36 @@ fn pointer_pointee {
 > It shouldn't change your understanding of safety in Rust, so we can focus on the simpler case of frame-only variables.
 
 - Rust does not permit manual memory management
+  - Rust *automatically* frees a box's heap memory.
 - A Box's owner manages deallocation
+  - If a variable owns a box, when Rust deallocates the variable's frame, then Rust deallocates the box's heap memory.
+- Collections use Boxes
+- Variables cannot be used after being moved
+
+```rust
+fn main() {
+    let a_num = 4; // At this point, `a_num` is on the main stack with a copy of 4
+    make_and_drop(); // when the `make_and_drop` scope ends, rust drops the `a_box` pointer from the stack & also deallocates the heap copy of 5 that `a_box` owned
+}
+
+fn make_and_drop() {
+    let a_box = Box::new(5); // `a_box` stores a pointer & owns the copy of 5 on the heap
+    let b_box = a_box; // Ownership of the box **moves** from `a_box` to `b_box`; `a_box` can no longer be used
+}
+```
+
+- Cloning avoids moves
+
+```rust
+fn main() {
+    let first = String::from("Ferris"); // first points to "Ferris" in heap memory
+    let first_clone = first.clone(); // first_clone points to "Ferris" in a separate heap memory location
+    let full = add_suffix(first_clone); // full points to a copy of "Ferris Jr." and first_clone points to deallocated memory (previously the separate heap copy of "Ferris")
+    println!("{full}, originally {first}");
+}
+
+fn add_suffix(mut name: String) -> String {
+    name.push_str(" Jr."); // Allocates new memory on the heap for f"{name} Jr.", updates the pointer, and deallocates the previous heap memory
+    name
+}
+```
