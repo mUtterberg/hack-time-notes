@@ -78,8 +78,30 @@ fn main() {
     println!("{full}, originally {first}");
 }
 
-fn add_suffix(mut name: String) -> String {
+fn add_suffix(mut name: String) -> String { // Ownership of the heap value moves from `first_clone` to `name`, so `first_clone` is immediately unusable
     name.push_str(" Jr."); // Allocates new memory on the heap for f"{name} Jr.", updates the pointer, and deallocates the previous heap memory
     name
 }
 ```
+
+## [References and Borrowing](https://rust-book.cs.brown.edu/ch04-02-references-and-borrowing.html)
+
+- References are non-owning pointers
+  - `&`: "a reference to" (as opposed to a newly allocated pointer in the function scope)
+
+```rust
+fn main() {
+    let m1 = String::from("Hello");
+    let m2 = String::from("world");
+    greet(&m1, &m2); // note the ampersands: this prevents transfer of ownership
+    let s = format!("{} {}", m1, m2);
+}
+
+fn greet(g1: &String, g2: &String) { // note the ampersands: this prevents transfer of ownership
+    println!("{} {}!", g1, g2);
+}
+```
+
+- Dereferencing a pointer accesses its data
+
+:dizzy_face: Pick back up here next week. :face_with_spiral_eyes:
