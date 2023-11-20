@@ -15,7 +15,21 @@ cargo run // Compile & run
 
 ## Notes
 
+### Benchmarking
+
 > If you’re benchmarking your code’s running time,
 > be sure to run `cargo build --release`
 > and benchmark with the executable in `target/release`.
 > ([source](https://rust-book.cs.brown.edu/ch01-03-hello-cargo.html#building-for-release))
+
+### Array vs Vector (vs arrays in other languages)
+
+> Unlike arrays in some other languages, arrays in Rust have a fixed length.
+> An array can also only contain elements of a single type.
+> ...
+> Arrays are useful when you want your data allocated on the stack rather than the heap...or
+> when you want to ensure you always have a fixed number of elements.
+> ...
+> A *vector* is a similar collection type provided by the standard library that is allowed to grow or shrink in size.
+> If you’re unsure whether to use an array or a vector, chances are you should use a vector
+> ([source](https://rust-book.cs.brown.edu/ch03-02-data-types.html#the-array-type))
