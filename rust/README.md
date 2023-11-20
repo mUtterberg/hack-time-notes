@@ -25,6 +25,7 @@ cargo run // Compile & run
 ### Array vs Vector (vs arrays in other languages)
 
 > Unlike arrays in some other languages, arrays in Rust have a fixed length.
+> An array can also only contain elements of a single type.
 > ...
 > Arrays are useful when you want your data allocated on the stack rather than the heap...or
 > when you want to ensure you always have a fixed number of elements.
