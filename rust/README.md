@@ -33,3 +33,12 @@ cargo run // Compile & run
 > A *vector* is a similar collection type provided by the standard library that is allowed to grow or shrink in size.
 > If you’re unsure whether to use an array or a vector, chances are you should use a vector
 > ([source](https://rust-book.cs.brown.edu/ch03-02-data-types.html#the-array-type))
+
+### Ownership
+
+> Ownership is Rust’s most unique feature and has deep implications for the rest of the language.
+> It enables Rust to make memory safety guarantees without needing a garbage collector,
+> so it’s important to understand how ownership works.
+> In this chapter, we’ll talk about ownership as well as several related features:
+> borrowing, slices, and how Rust lays data out in memory.
+> ([Chapter 4.0](https://rust-book.cs.brown.edu/ch04-00-understanding-ownership.html))
