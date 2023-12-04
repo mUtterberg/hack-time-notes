@@ -103,5 +103,19 @@ fn greet(g1: &String, g2: &String) { // note the ampersands: this prevents trans
 ```
 
 - Dereferencing a pointer accesses its data
+- **Pointer Safety Principle**: data should never be aliased and mutated at the same time.
 
-:dizzy_face: Pick back up here next week. :face_with_spiral_eyes:
+### The borrow checker
+
+> The core idea behind the borrow checker is that variables have three kinds of permissions on their data:
+>
+> - Read (R): data can be copied to another location.
+> - Write (W): data can be mutated in-place.
+> - Own (O): data can be moved or dropped.
+>
+> These permissions don't exist at runtime, only within the compiler.
+> They describe how the compiler "thinks" about your program before the program is executed.
+>
+> By default, a variable has read/own permissions (RO) on its data.
+> If a variable is annotated with `let mut`, then it also has the write permission (W).
+> The key idea is that references can temporarily remove these permissions.
