@@ -104,6 +104,16 @@ fn greet(g1: &String, g2: &String) { // note the ampersands: this prevents trans
 
 - Dereferencing a pointer accesses its data
 - **Pointer Safety Principle**: data should never be aliased and mutated at the same time.
+- References Change Permissions on Paths
+- Permissions Are Returned At The End of a Reference's Lifetime
+
+- Immutable reference: shared reference.
+  - Borrowed reference has R permission while being borrowed.
+  - Dereferenced borrower is read-only.
+- Mutable reference: unique reference.
+  - Borrowed reference loses *all* permissions while borrower is in use.
+    - This makes mutable references safe by temporarily disabling the original alias.
+  - Dereferenced borrower is read-write (non-owning borrower can mutate)
 
 ### The borrow checker
 
